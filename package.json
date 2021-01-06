@@ -36,7 +36,7 @@
   "dependencies": {
     "get-pixels": "^3.3.2",
     "handlebars": "^4.0.10",
-    "jimp": "^0.16.1",
+    "jimp": "^0.2.27",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mutable-buffer": "2.0.3",
