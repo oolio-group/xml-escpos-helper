@@ -1,8 +1,7 @@
-import { Command } from './command';
-import { MutableBuffer } from 'mutable-buffer';
-
+import { Command } from "./command";
+import { MutableBuffer } from "mutable-buffer";
+import Image from './pimage'
 export class BufferBuilder {
-
   private buffer: MutableBuffer;
 
   constructor(private defaultSettings: boolean = true) {
@@ -12,7 +11,6 @@ export class BufferBuilder {
       this.resetCharacterSize();
       this.resetCharacterCodeTable();
     }
-
   }
 
   public end(): BufferBuilder {
@@ -24,7 +22,10 @@ export class BufferBuilder {
     return this;
   }
 
-  public setCharacterSize(width: number = 0, height: number = 0): BufferBuilder {
+  public setCharacterSize(
+    width: number = 0,
+    height: number = 0
+  ): BufferBuilder {
     let size = (width << 4) + height;
     this.buffer.write(Command.GS_exclamation(size));
     return this;
@@ -55,7 +56,9 @@ export class BufferBuilder {
     return this;
   }
 
-  public startUnderline(underlineMode: UNDERLINE_MODE = UNDERLINE_MODE.TWO_POINTS_OF_COARSE): BufferBuilder {
+  public startUnderline(
+    underlineMode: UNDERLINE_MODE = UNDERLINE_MODE.TWO_POINTS_OF_COARSE
+  ): BufferBuilder {
     this.buffer.write(Command.ESC_minus(underlineMode));
     return this;
   }
@@ -94,31 +97,51 @@ export class BufferBuilder {
     return this;
   }
 
-  public printBarcode(data: string, barcodeSystem: BARCODE_SYSTEM, width: BARCODE_WIDTH = BARCODE_WIDTH.DOT_375, height: number = 162, labelFont: BARCODE_LABEL_FONT = BARCODE_LABEL_FONT.FONT_A, labelPosition: BARCODE_LABEL_POSITION = BARCODE_LABEL_POSITION.BOTTOM, leftSpacing: number = 0): BufferBuilder {
+  public printBarcode(
+    data: string,
+    barcodeSystem: BARCODE_SYSTEM,
+    width: BARCODE_WIDTH = BARCODE_WIDTH.DOT_375,
+    height: number = 162,
+    labelFont: BARCODE_LABEL_FONT = BARCODE_LABEL_FONT.FONT_A,
+    labelPosition: BARCODE_LABEL_POSITION = BARCODE_LABEL_POSITION.BOTTOM,
+    leftSpacing: number = 0
+  ): BufferBuilder {
     this.buffer.write(Command.GS_w(width)); // width
     this.buffer.write(Command.GS_h(height)); // height
     this.buffer.write(Command.GS_x(leftSpacing)); // left spacing
     this.buffer.write(Command.GS_f(labelFont)); // HRI font
     this.buffer.write(Command.GS_H(labelPosition)); // HRI font
     this.buffer.write(Command.GS_K(barcodeSystem, data.length)); // data is a string in UTF-8
-    this.buffer.write(data, 'ascii');
+    this.buffer.write(data, "ascii");
     return this;
   }
 
-  public printQRcode(data: string, version: number = 1, errorCorrectionLevel: QR_EC_LEVEL = QR_EC_LEVEL.H, componentTypes: number = 8): BufferBuilder {
-    this.buffer.write(Command.ESC_Z(version, errorCorrectionLevel, componentTypes));
+  public printQRcode(
+    data: string,
+    version: number = 1,
+    errorCorrectionLevel: QR_EC_LEVEL = QR_EC_LEVEL.H,
+    componentTypes: number = 8
+  ): BufferBuilder {
+    this.buffer.write(
+      Command.ESC_Z(version, errorCorrectionLevel, componentTypes)
+    );
     this.buffer.writeUInt16LE(data.length); // data is a string in UTF-8
-    this.buffer.write(data, 'ascii');
+    this.buffer.write(data, "ascii");
     return this;
   }
 
-  public printBitmap(image: number[], width: number, height: number, scale: BITMAP_SCALE = BITMAP_SCALE.NORMAL): BufferBuilder {
+  public printBitmap(
+    image: number[],
+    width: number,
+    height: number,
+    scale: BITMAP_SCALE = BITMAP_SCALE.NORMAL
+  ): BufferBuilder {
     //TODO
     return this;
   }
 
   public printText(text: string): BufferBuilder {
-    this.buffer.write(text, 'ascii');
+    this.buffer.write(text, "ascii");
     return this;
   }
 
@@ -164,18 +187,62 @@ export class BufferBuilder {
     return this;
   }
 
+  /**
+   * [image description]
+   * @param  {[type]} image   [description]
+   * @param  {[type]} density [description]
+   * @return {[Printer]} printer  [the escpos printer instance]
+   */
+  public writeImageBuffer(image, density) {
 
+    const BITMAP_FORMAT = {
+      BITMAP_S8: '\x1b\x2a\x00',
+      BITMAP_D8: '\x1b\x2a\x01',
+      BITMAP_S24: '\x1b\x2a\x20',
+      BITMAP_D24: '\x1b\x2a\x21'
+    };
+const     EOL= '\n'
+
+    if (!(image instanceof Image))
+      throw new TypeError("Only escpos.Image supported");
+    density = density || "d24";
+    var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
+    var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
+    var bitmap = image.toBitmap(n * 8);
+    var self = this;
+
+    // added a delay so the printer can process the graphical data
+    // when connected via slower connection ( e.g.: Serial)
+    this.breakLine(0); // set line spacing to 0
+    bitmap.data.forEach(async (line) => {
+      this.buffer.write(header);
+      this.buffer.writeUInt16LE(line.length / n);
+      this.buffer.write(line);
+      this.buffer.write(EOL);
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(true);
+        }, 200);
+      });
+    });
+    return this.breakLine();
+  }
+
+  public startPImage(image, density): BufferBuilder {
+     this.writeImageBuffer(image, density);
+    return this;
+  }
 }
 
 export enum UNDERLINE_MODE {
   ONE_POINT_OF_COARSE = 49,
-  TWO_POINTS_OF_COARSE = 50
+  TWO_POINTS_OF_COARSE = 50,
 }
 
 export enum ALIGNMENT {
   LEFT = 48,
   CENTER = 49,
-  RIGHT = 50
+  RIGHT = 50,
 }
 
 export enum BARCODE_SYSTEM {
@@ -187,7 +254,7 @@ export enum BARCODE_SYSTEM {
   ITF = 70,
   CODABAR = 71,
   CODE_93 = 72,
-  CODE_128 = 73
+  CODE_128 = 73,
 }
 
 export enum BARCODE_WIDTH {
@@ -195,38 +262,38 @@ export enum BARCODE_WIDTH {
   DOT_375 = 3,
   DOT_560 = 4,
   DOT_625 = 5,
-  DOT_750 = 6
+  DOT_750 = 6,
 }
 
 export enum BARCODE_LABEL_FONT {
   FONT_A = 48,
-  FONT_B = 49
+  FONT_B = 49,
 }
 
 export enum BARCODE_LABEL_POSITION {
   NOT_PRINT = 48,
   ABOVE = 49,
   BOTTOM = 50,
-  ABOVE_BOTTOM = 51
+  ABOVE_BOTTOM = 51,
 }
 
 export enum QR_EC_LEVEL {
   L = 0,
   M = 1,
   Q = 2,
-  H = 3
+  H = 3,
 }
 
 export enum BITMAP_SCALE {
   NORMAL = 48,
   DOUBLE_WIDTH = 49,
   DOUBLE_HEIGHT = 50,
-  FOUR_TIMES = 51
+  FOUR_TIMES = 51,
 }
 
 export enum STATUS_TYPE {
   PRINTER_STATUS = 1,
   OFFLINE_STATUS = 2,
   ERROR_STATUS = 3,
-  PAPER_ROLL_SENSOR_STATUS = 4
+  PAPER_ROLL_SENSOR_STATUS = 4,
 }

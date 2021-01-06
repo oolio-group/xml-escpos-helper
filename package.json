@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "escpos": "^3.0.0-alpha.6",
     "get-pixels": "^3.3.2",
     "handlebars": "^4.0.10",
     "jimp": "^0.2.27",
