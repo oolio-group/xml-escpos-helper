@@ -34,6 +34,7 @@
     "url": "https://github.com/ingoncalves/escpos-xml/issues"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "get-pixels": "^3.3.2",
     "handlebars": "^4.0.10",
     "jimp": "^0.2.27",
