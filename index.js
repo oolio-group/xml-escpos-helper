@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 161);
+/******/ 	return __webpack_require__(__webpack_require__.s = 162);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2168,7 +2168,7 @@ return /******/ (function(modules) { // webpackBootstrap
             try {
                 oldLocale = globalLocale._abbr;
                 aliasedRequire = require;
-                __webpack_require__(163)("./" + name);
+                __webpack_require__(164)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {
                 // mark as not found to avoid repeating expensive file require call causing high CPU
@@ -6022,9 +6022,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.STATUS_TYPE = exports.BITMAP_SCALE = exports.QR_EC_LEVEL = exports.BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_FONT = exports.BARCODE_WIDTH = exports.BARCODE_SYSTEM = exports.ALIGNMENT = exports.UNDERLINE_MODE = exports.BufferBuilder = void 0;
-const command_1 = __webpack_require__(170);
-const mutable_buffer_1 = __webpack_require__(171);
-const pimage_1 = __importDefault(__webpack_require__(175));
+const command_1 = __webpack_require__(171);
+const mutable_buffer_1 = __webpack_require__(172);
+const pimage_1 = __importDefault(__webpack_require__(154));
 class BufferBuilder {
     constructor(defaultSettings = true) {
         this.defaultSettings = defaultSettings;
@@ -6318,7 +6318,7 @@ var util = Object.create(__webpack_require__(8));
 util.inherits = __webpack_require__(7);
 /*</replacement>*/
 
-var Readable = __webpack_require__(155);
+var Readable = __webpack_require__(156);
 var Writable = __webpack_require__(14);
 
 util.inherits(Duplex, Readable);
@@ -6416,8 +6416,8 @@ Duplex.prototype._destroy = function (err, cb) {
 
 
 
-var base64 = __webpack_require__(173)
-var ieee754 = __webpack_require__(174)
+var base64 = __webpack_require__(174)
+var ieee754 = __webpack_require__(175)
 var isArray = __webpack_require__(153)
 
 exports.Buffer = Buffer
@@ -8409,7 +8409,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.XMLParser = void 0;
-const xml_parser_1 = __importDefault(__webpack_require__(166));
+const xml_parser_1 = __importDefault(__webpack_require__(167));
 const buffer_builder_1 = __webpack_require__(4);
 const node_factory_1 = __webpack_require__(202);
 class XMLParser {
@@ -8924,12 +8924,12 @@ function once(emitter, name) {
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(155);
+exports = module.exports = __webpack_require__(156);
 exports.Stream = exports;
 exports.Readable = exports;
 exports.Writable = __webpack_require__(14);
 exports.Duplex = __webpack_require__(5);
-exports.Transform = __webpack_require__(159);
+exports.Transform = __webpack_require__(160);
 exports.PassThrough = __webpack_require__(196);
 
 
@@ -9083,7 +9083,7 @@ var internalUtil = {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(156);
+var Stream = __webpack_require__(157);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -9099,7 +9099,7 @@ function _isUint8Array(obj) {
 
 /*</replacement>*/
 
-var destroyImpl = __webpack_require__(157);
+var destroyImpl = __webpack_require__(158);
 
 util.inherits(Writable, Stream);
 
@@ -9722,11 +9722,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TemplateParser = void 0;
-const handlebars = __importStar(__webpack_require__(162));
+const handlebars = __importStar(__webpack_require__(163));
 const moment = __importStar(__webpack_require__(0));
 const numeral = __importStar(__webpack_require__(152));
-__webpack_require__(164);
-const lodash_1 = __webpack_require__(165);
+__webpack_require__(165);
+const lodash_1 = __webpack_require__(166);
 const xml_parser_1 = __webpack_require__(10);
 class TemplateParser {
     constructor() {
@@ -25893,6 +25893,169 @@ module.exports = Array.isArray || function (arr) {
 
 /***/ }),
 /* 154 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+const getPixels = __webpack_require__(176);
+
+/**
+ * [Image description]
+ * @param {[type]} pixels [description]
+ */
+function Image(pixels){
+  if(!(this instanceof Image))
+    return new Image(pixels);
+  this.pixels = pixels;
+
+  this.data = [];
+  function rgb(pixel) {
+    return {
+      r: pixel[0],
+      g: pixel[1],
+      b: pixel[2],
+      a: pixel[3]
+    };
+  };
+
+  var self = this;
+  for(var i=0;i<this.pixels.data.length;i+=this.size.colors){
+    this.data.push(rgb(new Array(this.size.colors).fill(0).map(function(_, b){
+      return self.pixels.data[ i + b ];
+    })));
+  };
+
+  this.data = this.data.map(function(pixel) {
+   if (pixel.a == 0) return 0;
+   var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+   return shouldBeWhite ? 0 : 1;
+  });
+
+};
+
+/**
+ * [load description]
+ * @param  {[type]}   url      [description]
+ * @param  {[type]}   type     [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
+Image.load = function(url, type, callback){
+  if(typeof type == 'function'){
+    callback = type;
+    type = null;
+  }
+  getPixels(url, type, function(err, pixels){
+    if(err) return callback(err);
+    callback(new Image(pixels));
+  });
+};
+
+/**
+ * [description]
+ * @return {[type]}     [description]
+ */
+Image.prototype.__defineGetter__('size', function(){
+  return {
+    width : this.pixels.shape[0],
+    height: this.pixels.shape[1],
+    colors: this.pixels.shape[2],
+  };
+});
+
+/**
+ * [toBitmap description]
+ * @param  {[type]} density [description]
+ * @return {[type]}         [description]
+ */
+Image.prototype.toBitmap = function(density) {
+  density = density || 24;
+
+  var ld, result = [];
+  var x, y, b, l, i;
+  var c = density / 8;
+
+  // n blocks of lines
+  var n = Math.ceil(this.size.height / density);
+
+  for (y = 0; y < n; y++) {
+    // line data
+    ld = result[y] = [];
+
+    for (x = 0; x < this.size.width; x++) {
+
+      for (b = 0; b < density; b++) {
+        i = x * c + (b >> 3);
+
+        if (ld[i] === undefined) {
+          ld[i] = 0;
+        }
+
+        l = y * density + b;
+        if (l < this.size.height) {
+          if (this.data[l * this.size.width + x]) {
+            ld[i] += (0x80 >> (b & 0x7));
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    data: result,
+    density: density
+  };
+};
+/**
+ * [toRaster description]
+ * @return {[type]} [description]
+ */
+Image.prototype.toRaster = function () {
+  var result = [];
+  var width  = this.size.width;
+  var height = this.size.height;
+  var data   = this.data;
+
+  // n blocks of lines
+  var n = Math.ceil(width / 8);
+  var x, y, b, c, i;
+
+  for (y = 0; y < height; y++) {
+
+    for (x = 0; x < n; x++) {
+
+      for (b = 0; b < 8; b++) {
+        i = x * 8 + b;
+
+        if (result[y * n + x] === undefined) {
+          result[y * n + x] = 0;
+        }
+
+        c = x * 8 + b;
+        if (c < width) {
+          if (data[y * width + i]) {
+            result[y * n + x] += (0x80 >> (b & 0x7));
+          }
+        }
+      }
+    }
+  }
+  return {
+    data: result,
+    width: n,
+    height: height
+  };
+}
+
+/**
+ * [exports description]
+ * @type {[type]}
+ */
+/* harmony default export */ __webpack_exports__["default"] = (Image);
+
+
+/***/ }),
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var iota = __webpack_require__(178)
@@ -26247,7 +26410,7 @@ module.exports = wrappedNDArrayCtor
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26300,7 +26463,7 @@ var EElistenerCount = function (emitter, type) {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(156);
+var Stream = __webpack_require__(157);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -26332,7 +26495,7 @@ if (debugUtil && debugUtil.debuglog) {
 /*</replacement>*/
 
 var BufferList = __webpack_require__(190);
-var destroyImpl = __webpack_require__(157);
+var destroyImpl = __webpack_require__(158);
 var StringDecoder;
 
 util.inherits(Readable, Stream);
@@ -26422,7 +26585,7 @@ function ReadableState(options, stream) {
   this.decoder = null;
   this.encoding = null;
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __webpack_require__(158).StringDecoder;
+    if (!StringDecoder) StringDecoder = __webpack_require__(159).StringDecoder;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
@@ -26578,7 +26741,7 @@ Readable.prototype.isPaused = function () {
 
 // backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __webpack_require__(158).StringDecoder;
+  if (!StringDecoder) StringDecoder = __webpack_require__(159).StringDecoder;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -27273,14 +27436,14 @@ function indexOf(xs, x) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(2)))
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(11).EventEmitter;
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27360,7 +27523,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27662,7 +27825,7 @@ function simpleEnd(buf) {
 }
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27882,7 +28045,7 @@ function done(stream, er, data) {
 }
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27911,7 +28074,7 @@ exports.default = TextNode;
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27934,7 +28097,7 @@ __exportStar(__webpack_require__(216), exports);
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**!
@@ -33149,7 +33312,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -33438,10 +33601,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 163;
+webpackContext.id = 164;
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// numeral.js locale configuration
@@ -33482,7 +33645,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -50651,7 +50814,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(16)(module)))
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50659,7 +50822,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  * Module dependencies.
  */
 
-var debug = __webpack_require__(167)('xml-parser');
+var debug = __webpack_require__(168)('xml-parser');
 
 /**
  * Expose `parse`.
@@ -50824,7 +50987,7 @@ function parse(xml) {
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -50833,7 +50996,7 @@ function parse(xml) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(168);
+exports = module.exports = __webpack_require__(169);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -51016,7 +51179,7 @@ function localstorage() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -51032,7 +51195,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(169);
+exports.humanize = __webpack_require__(170);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -51224,7 +51387,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports) {
 
 /**
@@ -51382,7 +51545,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51432,20 +51595,20 @@ Command.LF = [Command.NL];
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var MutableBuffer = __webpack_require__(172);
+var MutableBuffer = __webpack_require__(173);
 
 module.exports = exports = MutableBuffer;
 exports.MutableBuffer = MutableBuffer;
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51693,7 +51856,7 @@ MutableBuffer.prototype.writeDoubleBE = function writeDoubleBE(value, noAssert) 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6).Buffer))
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51850,7 +52013,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports) {
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
@@ -51941,169 +52104,6 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 175 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-const getPixels = __webpack_require__(176);
-
-/**
- * [Image description]
- * @param {[type]} pixels [description]
- */
-function Image(pixels){
-  if(!(this instanceof Image))
-    return new Image(pixels);
-  this.pixels = pixels;
-
-  this.data = [];
-  function rgb(pixel) {
-    return {
-      r: pixel[0],
-      g: pixel[1],
-      b: pixel[2],
-      a: pixel[3]
-    };
-  };
-
-  var self = this;
-  for(var i=0;i<this.pixels.data.length;i+=this.size.colors){
-    this.data.push(rgb(new Array(this.size.colors).fill(0).map(function(_, b){
-      return self.pixels.data[ i + b ];
-    })));
-  };
-
-  this.data = this.data.map(function(pixel) {
-   if (pixel.a == 0) return 0;
-   var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
-   return shouldBeWhite ? 0 : 1;
-  });
-
-};
-
-/**
- * [load description]
- * @param  {[type]}   url      [description]
- * @param  {[type]}   type     [description]
- * @param  {Function} callback [description]
- * @return {[type]}            [description]
- */
-Image.load = function(url, type, callback){
-  if(typeof type == 'function'){
-    callback = type;
-    type = null;
-  }
-  getPixels(url, type, function(err, pixels){
-    if(err) return callback(err);
-    callback(new Image(pixels));
-  });
-};
-
-/**
- * [description]
- * @return {[type]}     [description]
- */
-Image.prototype.__defineGetter__('size', function(){
-  return {
-    width : this.pixels.shape[0],
-    height: this.pixels.shape[1],
-    colors: this.pixels.shape[2],
-  };
-});
-
-/**
- * [toBitmap description]
- * @param  {[type]} density [description]
- * @return {[type]}         [description]
- */
-Image.prototype.toBitmap = function(density) {
-  density = density || 24;
-
-  var ld, result = [];
-  var x, y, b, l, i;
-  var c = density / 8;
-
-  // n blocks of lines
-  var n = Math.ceil(this.size.height / density);
-
-  for (y = 0; y < n; y++) {
-    // line data
-    ld = result[y] = [];
-
-    for (x = 0; x < this.size.width; x++) {
-
-      for (b = 0; b < density; b++) {
-        i = x * c + (b >> 3);
-
-        if (ld[i] === undefined) {
-          ld[i] = 0;
-        }
-
-        l = y * density + b;
-        if (l < this.size.height) {
-          if (this.data[l * this.size.width + x]) {
-            ld[i] += (0x80 >> (b & 0x7));
-          }
-        }
-      }
-    }
-  }
-
-  return {
-    data: result,
-    density: density
-  };
-};
-/**
- * [toRaster description]
- * @return {[type]} [description]
- */
-Image.prototype.toRaster = function () {
-  var result = [];
-  var width  = this.size.width;
-  var height = this.size.height;
-  var data   = this.data;
-
-  // n blocks of lines
-  var n = Math.ceil(width / 8);
-  var x, y, b, c, i;
-
-  for (y = 0; y < height; y++) {
-
-    for (x = 0; x < n; x++) {
-
-      for (b = 0; b < 8; b++) {
-        i = x * 8 + b;
-
-        if (result[y * n + x] === undefined) {
-          result[y * n + x] = 0;
-        }
-
-        c = x * 8 + b;
-        if (c < width) {
-          if (data[y * width + i]) {
-            result[y * n + x] += (0x80 >> (b & 0x7));
-          }
-        }
-      }
-    }
-  }
-  return {
-    data: result,
-    width: n,
-    height: height
-  };
-}
-
-/**
- * [exports description]
- * @type {[type]}
- */
-/* harmony default export */ __webpack_exports__["default"] = (Image);
-
-
-/***/ }),
 /* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -52111,7 +52111,7 @@ Image.prototype.toRaster = function () {
 /* WEBPACK VAR INJECTION */(function(process, Buffer) {
 
 var path          = __webpack_require__(177)
-var ndarray       = __webpack_require__(154)
+var ndarray       = __webpack_require__(155)
 var GifReader     = __webpack_require__(180).GifReader
 var pack          = __webpack_require__(181)
 var through       = __webpack_require__(187)
@@ -53419,7 +53419,7 @@ try { exports.GifWriter = GifWriter; exports.GifReader = GifReader } catch(e) {}
 "use strict";
 
 
-var ndarray = __webpack_require__(154)
+var ndarray = __webpack_require__(155)
 var do_convert = __webpack_require__(182)
 
 module.exports = function convert(arr, result) {
@@ -54872,7 +54872,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 module.exports = PassThrough;
 
-var Transform = __webpack_require__(159);
+var Transform = __webpack_require__(160);
 
 /*<replacement>*/
 var util = Object.create(__webpack_require__(8));
@@ -54999,7 +54999,7 @@ const document_node_1 = __importDefault(__webpack_require__(207));
 const line_feed_node_1 = __importDefault(__webpack_require__(208));
 const qrcode_node_1 = __importDefault(__webpack_require__(209));
 const small_node_1 = __importDefault(__webpack_require__(210));
-const text_node_1 = __importDefault(__webpack_require__(160));
+const text_node_1 = __importDefault(__webpack_require__(161));
 const text_line_node_1 = __importDefault(__webpack_require__(211));
 const underline_node_1 = __importDefault(__webpack_require__(212));
 const white_mode_node_1 = __importDefault(__webpack_require__(213));
@@ -55363,7 +55363,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(1);
-const text_node_1 = __importDefault(__webpack_require__(160));
+const text_node_1 = __importDefault(__webpack_require__(161));
 class TextLineNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55465,15 +55465,23 @@ exports.default = PaperCutNode;
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(1);
+const pimage_1 = __importDefault(__webpack_require__(154));
 class PImageNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
     }
     open(bufferBuilder) {
-        bufferBuilder.startPImage(this.attributes.image, this.attributes.density);
-        return bufferBuilder;
+        return pimage_1.default.load(this.attributes.image, (imagePx) => {
+            // Image.image(imagePx, 's8')
+            bufferBuilder.startPImage(imagePx, this.attributes.density);
+            return bufferBuilder;
+        });
+        // return bufferBuilder;
     }
     close(bufferBuilder) {
         return bufferBuilder;
