@@ -1,5 +1,5 @@
 var webpack = require('webpack');
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+// var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
 module.exports = {
   entry: __dirname + '/lib/index.ts',
@@ -24,7 +24,7 @@ module.exports = {
     umdNamedDefine: true
   },
   plugins: [
-    new UglifyJsPlugin()
+    // new UglifyJsPlugin()
   ]
 };
 

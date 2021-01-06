@@ -7,11 +7,11 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "esnext",
-    "outDir": "./dist/",
-    "lib": ["es2017", "dom"],
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "target": "es2015",
+    "outDir": "./dist/",
+    "lib": ["es2017", "dom"]
   },
   "include": ["lib/**/*.ts"],
   "exclude": ["node_modules"],
