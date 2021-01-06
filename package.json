@@ -15,7 +15,7 @@
     "watch": "npm run webpack:watch",
     "webpack:build": "webpack --config webpack.config.js",
     "webpack:watch": "webpack --config webpack.config.js --watch",
-    "lint": "tslint --format codeFrame --type-check --project tslint.json lib/**/*.ts",
+    "lint": "tslint --format codeFrame --project tslint.json lib/**/*.ts",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,14 +35,17 @@
   },
   "dependencies": {
     "handlebars": "^4.0.10",
-    "lodash": "^4.17.4",
+    "jimp": "^0.16.1",
+    "lodash": "^4.17.20",
     "moment": "^2.18.1",
     "mutable-buffer": "2.0.3",
     "numeral": "^2.0.6",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.74",
+    "@types/jimp": "^0.2.28",
+    "@types/lodash": "^4.14.167",
+    "@types/node": "^14.14.20",
     "@types/numeral": "0.0.22",
     "@types/xml-parser": "^1.2.29",
     "ts-loader": "^2.3.4",

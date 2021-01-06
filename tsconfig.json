@@ -7,18 +7,16 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5",
-    "outDir": "./dist/"
+    "target": "esnext",
+    "outDir": "./dist/",
+    "lib": ["es2017", "dom"],
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "lib/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["lib/**/*.ts"],
+  "exclude": ["node_modules"],
   "compileOnSave": false,
   "atom": {
     "rewriteTsconfig": false
   }
 }
-

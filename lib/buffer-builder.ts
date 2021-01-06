@@ -159,6 +159,11 @@ export class BufferBuilder {
     return this;
   }
 
+  public printImage(): BufferBuilder {
+    this.buffer.write(Command.ESC_ak);
+    return this;
+  }
+
 
 }
 

@@ -11,6 +11,7 @@ import TextLineNode from './nodes/text-line-node';
 import UnderlineNode from './nodes/underline-node';
 import WhiteModeNode from './nodes/white-mode-node';
 import PaperCutNode from './nodes/paper-cut-node';
+import ImageNode from './nodes/image-node';
 
 export class NodeFactory {
 
@@ -29,6 +30,8 @@ export class NodeFactory {
       case 'underline':  return new UnderlineNode(node);
       case 'white-mode': return new WhiteModeNode(node);
       case 'paper-cut': return new PaperCutNode(node);
+      case 'image':       return new ImageNode(node);
+
       default:           return null;
     }
   }
