@@ -6269,6 +6269,143 @@ var STATUS_TYPE;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// a duplex stream is just a stream that is both readable and writable.
+// Since JS doesn't have multiple prototypal inheritance, this class
+// prototypally inherits from Readable, and then parasitically from
+// Writable.
+
+
+
+/*<replacement>*/
+
+var pna = __webpack_require__(9);
+/*</replacement>*/
+
+/*<replacement>*/
+var objectKeys = Object.keys || function (obj) {
+  var keys = [];
+  for (var key in obj) {
+    keys.push(key);
+  }return keys;
+};
+/*</replacement>*/
+
+module.exports = Duplex;
+
+/*<replacement>*/
+var util = Object.create(__webpack_require__(8));
+util.inherits = __webpack_require__(7);
+/*</replacement>*/
+
+var Readable = __webpack_require__(155);
+var Writable = __webpack_require__(14);
+
+util.inherits(Duplex, Readable);
+
+{
+  // avoid scope creep, the keys array can then be collected
+  var keys = objectKeys(Writable.prototype);
+  for (var v = 0; v < keys.length; v++) {
+    var method = keys[v];
+    if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+  }
+}
+
+function Duplex(options) {
+  if (!(this instanceof Duplex)) return new Duplex(options);
+
+  Readable.call(this, options);
+  Writable.call(this, options);
+
+  if (options && options.readable === false) this.readable = false;
+
+  if (options && options.writable === false) this.writable = false;
+
+  this.allowHalfOpen = true;
+  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
+
+  this.once('end', onend);
+}
+
+Object.defineProperty(Duplex.prototype, 'writableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function () {
+    return this._writableState.highWaterMark;
+  }
+});
+
+// the no-half-open enforcer
+function onend() {
+  // if we allow half-open state, or if the writable side ended,
+  // then we're ok.
+  if (this.allowHalfOpen || this._writableState.ended) return;
+
+  // no more data can be written.
+  // But allow more writes to happen in this tick.
+  pna.nextTick(onEndNT, this);
+}
+
+function onEndNT(self) {
+  self.end();
+}
+
+Object.defineProperty(Duplex.prototype, 'destroyed', {
+  get: function () {
+    if (this._readableState === undefined || this._writableState === undefined) {
+      return false;
+    }
+    return this._readableState.destroyed && this._writableState.destroyed;
+  },
+  set: function (value) {
+    // we ignore the value if the stream
+    // has not been initialized yet
+    if (this._readableState === undefined || this._writableState === undefined) {
+      return;
+    }
+
+    // backward compatibility, the user is explicitly
+    // managing destroyed
+    this._readableState.destroyed = value;
+    this._writableState.destroyed = value;
+  }
+});
+
+Duplex.prototype._destroy = function (err, cb) {
+  this.push(null);
+  this.end();
+
+  pna.nextTick(cb, err);
+};
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(global) {/*!
  * The buffer module from node.js, for the browser.
  *
@@ -8062,143 +8199,6 @@ function isnan (val) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// a duplex stream is just a stream that is both readable and writable.
-// Since JS doesn't have multiple prototypal inheritance, this class
-// prototypally inherits from Readable, and then parasitically from
-// Writable.
-
-
-
-/*<replacement>*/
-
-var pna = __webpack_require__(9);
-/*</replacement>*/
-
-/*<replacement>*/
-var objectKeys = Object.keys || function (obj) {
-  var keys = [];
-  for (var key in obj) {
-    keys.push(key);
-  }return keys;
-};
-/*</replacement>*/
-
-module.exports = Duplex;
-
-/*<replacement>*/
-var util = Object.create(__webpack_require__(8));
-util.inherits = __webpack_require__(7);
-/*</replacement>*/
-
-var Readable = __webpack_require__(155);
-var Writable = __webpack_require__(14);
-
-util.inherits(Duplex, Readable);
-
-{
-  // avoid scope creep, the keys array can then be collected
-  var keys = objectKeys(Writable.prototype);
-  for (var v = 0; v < keys.length; v++) {
-    var method = keys[v];
-    if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
-  }
-}
-
-function Duplex(options) {
-  if (!(this instanceof Duplex)) return new Duplex(options);
-
-  Readable.call(this, options);
-  Writable.call(this, options);
-
-  if (options && options.readable === false) this.readable = false;
-
-  if (options && options.writable === false) this.writable = false;
-
-  this.allowHalfOpen = true;
-  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
-
-  this.once('end', onend);
-}
-
-Object.defineProperty(Duplex.prototype, 'writableHighWaterMark', {
-  // making it explicit this property is not enumerable
-  // because otherwise some prototype manipulation in
-  // userland will fail
-  enumerable: false,
-  get: function () {
-    return this._writableState.highWaterMark;
-  }
-});
-
-// the no-half-open enforcer
-function onend() {
-  // if we allow half-open state, or if the writable side ended,
-  // then we're ok.
-  if (this.allowHalfOpen || this._writableState.ended) return;
-
-  // no more data can be written.
-  // But allow more writes to happen in this tick.
-  pna.nextTick(onEndNT, this);
-}
-
-function onEndNT(self) {
-  self.end();
-}
-
-Object.defineProperty(Duplex.prototype, 'destroyed', {
-  get: function () {
-    if (this._readableState === undefined || this._writableState === undefined) {
-      return false;
-    }
-    return this._readableState.destroyed && this._writableState.destroyed;
-  },
-  set: function (value) {
-    // we ignore the value if the stream
-    // has not been initialized yet
-    if (this._readableState === undefined || this._writableState === undefined) {
-      return;
-    }
-
-    // backward compatibility, the user is explicitly
-    // managing destroyed
-    this._readableState.destroyed = value;
-    this._writableState.destroyed = value;
-  }
-});
-
-Duplex.prototype._destroy = function (err, cb) {
-  this.push(null);
-  this.end();
-
-  pna.nextTick(cb, err);
-};
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -8343,7 +8343,7 @@ function objectToString(o) {
   return Object.prototype.toString.call(o);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6).Buffer))
 
 /***/ }),
 /* 9 */
@@ -8928,7 +8928,7 @@ exports = module.exports = __webpack_require__(155);
 exports.Stream = exports;
 exports.Readable = exports;
 exports.Writable = __webpack_require__(14);
-exports.Duplex = __webpack_require__(6);
+exports.Duplex = __webpack_require__(5);
 exports.Transform = __webpack_require__(159);
 exports.PassThrough = __webpack_require__(196);
 
@@ -8938,7 +8938,7 @@ exports.PassThrough = __webpack_require__(196);
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(5)
+var buffer = __webpack_require__(6)
 var Buffer = buffer.Buffer
 
 // alternative to using Object.keys for old browsers
@@ -9106,7 +9106,7 @@ util.inherits(Writable, Stream);
 function nop() {}
 
 function WritableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(6);
+  Duplex = Duplex || __webpack_require__(5);
 
   options = options || {};
 
@@ -9256,7 +9256,7 @@ if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.protot
 }
 
 function Writable(options) {
-  Duplex = Duplex || __webpack_require__(6);
+  Duplex = Duplex || __webpack_require__(5);
 
   // Writable ctor is applied to Duplexes, too.
   // `realHasInstance` is necessary because using plain `instanceof`
@@ -26352,7 +26352,7 @@ function prependListener(emitter, event, fn) {
 }
 
 function ReadableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(6);
+  Duplex = Duplex || __webpack_require__(5);
 
   options = options || {};
 
@@ -26429,7 +26429,7 @@ function ReadableState(options, stream) {
 }
 
 function Readable(options) {
-  Duplex = Duplex || __webpack_require__(6);
+  Duplex = Duplex || __webpack_require__(5);
 
   if (!(this instanceof Readable)) return new Readable(options);
 
@@ -27733,7 +27733,7 @@ function simpleEnd(buf) {
 
 module.exports = Transform;
 
-var Duplex = __webpack_require__(6);
+var Duplex = __webpack_require__(5);
 
 /*<replacement>*/
 var util = Object.create(__webpack_require__(8));
@@ -27930,7 +27930,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(15), exports);
 __exportStar(__webpack_require__(10), exports);
 __exportStar(__webpack_require__(4), exports);
-__exportStar(__webpack_require__(219), exports);
+__exportStar(__webpack_require__(216), exports);
 
 
 /***/ }),
@@ -51690,7 +51690,7 @@ MutableBuffer.prototype.writeDoubleBE = function writeDoubleBE(value, noAssert) 
   return this;
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6).Buffer))
 
 /***/ }),
 /* 173 */
@@ -52243,7 +52243,7 @@ module.exports = function getPixels(url, type, cb) {
       }
   }
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(5).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(6).Buffer))
 
 /***/ }),
 /* 177 */
@@ -54773,7 +54773,7 @@ function config (name) {
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
-var buffer = __webpack_require__(5)
+var buffer = __webpack_require__(6)
 var Buffer = buffer.Buffer
 
 // alternative to using Object.keys for old browsers
@@ -54902,7 +54902,7 @@ module.exports = __webpack_require__(14);
 /* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(6);
+module.exports = __webpack_require__(5);
 
 
 /***/ }),
@@ -54978,7 +54978,7 @@ function dataUriToBuffer (uri) {
   return buffer;
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6).Buffer))
 
 /***/ }),
 /* 202 */
@@ -55004,8 +55004,7 @@ const text_line_node_1 = __importDefault(__webpack_require__(211));
 const underline_node_1 = __importDefault(__webpack_require__(212));
 const white_mode_node_1 = __importDefault(__webpack_require__(213));
 const paper_cut_node_1 = __importDefault(__webpack_require__(214));
-const image_node_1 = __importDefault(__webpack_require__(215));
-const pimage_node_1 = __importDefault(__webpack_require__(218));
+const pimage_node_1 = __importDefault(__webpack_require__(215));
 class NodeFactory {
     static create(nodeType, node) {
         switch (nodeType) {
@@ -55022,7 +55021,6 @@ class NodeFactory {
             case 'underline': return new underline_node_1.default(node);
             case 'white-mode': return new white_mode_node_1.default(node);
             case 'paper-cut': return new paper_cut_node_1.default(node);
-            case 'image': return new image_node_1.default(node);
             case 'pimage': return new pimage_node_1.default(node);
             default: return null;
         }
@@ -55467,332 +55465,6 @@ exports.default = PaperCutNode;
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const xml_node_1 = __webpack_require__(1);
-const image_1 = __webpack_require__(216);
-class ImageNode extends xml_node_1.XMLNode {
-    constructor(node) {
-        super(node);
-    }
-    resolveImage(path) {
-        image_1.Image.load('https://staticaltmetric.s3.amazonaws.com/uploads/2015/10/dark-logo-for-site.png', 'function', (value) => {
-            console.log(value);
-        });
-        return new Promise((resolve, reject) => {
-        });
-    }
-    loadImage(image) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.resolveImage(image);
-        });
-    }
-    open(bufferBuilder) {
-        console.log(this.loadImage(this.attributes.src));
-        return bufferBuilder;
-    }
-    close(bufferBuilder) {
-        return bufferBuilder;
-    }
-}
-exports.default = ImageNode;
-
-
-/***/ }),
-/* 216 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Image = void 0;
-// import * as getPixels from 'get-pixels';
-const Jimp = __importStar(__webpack_require__(217));
-class Image {
-    constructor(pixels) {
-        if (!(this instanceof Image)) {
-            return new Image(pixels);
-        }
-        this.pixels = pixels;
-        for (var i = 0; i < this.pixels.data.length; i += this.size.colors) {
-            this.data.push(this.rgb(new Array(this.size.colors).fill(0).map(function (_, b) {
-                return this.pixels.data[i + b];
-            })));
-        }
-        ;
-        this.data = this.data.map(function (pixel) {
-            if (pixel.a == 0)
-                return 0;
-            return pixel.r !== 0xFF || pixel.g !== 0xFF || pixel.b !== 0xFF ? 1 : 0;
-        });
-    }
-    rgb(pixel) {
-        return {
-            r: pixel[0],
-            g: pixel[1],
-            b: pixel[2],
-            a: pixel[3]
-        };
-    }
-    toBitmap(density) {
-        density = density || 24;
-        var ld, result = [];
-        var x, y, b, l, i;
-        var c = density / 8;
-        // n blocks of lines
-        var n = Math.ceil(this.size.height / density);
-        for (y = 0; y < n; y++) {
-            // line data
-            ld = result[y] = [];
-            for (x = 0; x < this.size.width; x++) {
-                for (b = 0; b < density; b++) {
-                    i = x * c + (b >> 3);
-                    if (ld[i] === undefined) {
-                        ld[i] = 0;
-                    }
-                    l = y * density + b;
-                    if (l < this.size.height) {
-                        if (this.data[l * this.size.width + x]) {
-                            ld[i] += (0x80 >> (b & 0x7));
-                        }
-                    }
-                }
-            }
-        }
-        return {
-            data: result,
-            density: density
-        };
-    }
-    toRaster() {
-        var result = [];
-        var width = this.size.width;
-        var height = this.size.height;
-        var data = this.data;
-        // n blocks of lines
-        var n = Math.ceil(width / 8);
-        var x, y, b, c, i;
-        for (y = 0; y < height; y++) {
-            for (x = 0; x < n; x++) {
-                for (b = 0; b < 8; b++) {
-                    i = x * 8 + b;
-                    if (result[y * n + x] === undefined) {
-                        result[y * n + x] = 0;
-                    }
-                    c = x * 8 + b;
-                    if (c < width) {
-                        if (data[y * width + i]) {
-                            result[y * n + x] += (0x80 >> (b & 0x7));
-                        }
-                    }
-                }
-            }
-        }
-        return {
-            data: result,
-            width: n,
-            height: height
-        };
-    }
-    get size() {
-        return {
-            width: this.pixels.shape[0],
-            height: this.pixels.shape[1],
-            colors: this.pixels.shape[2],
-        };
-    }
-}
-exports.Image = Image;
-/**
-* [load description]
-* @param  {[type]}   url      [description]
-* @param  {[type]}   type     [description]
-* @param  {Function} callback [description]
-* @return {[type]}            [description]
-*/
-Image.load = function (url, type, callback) {
-    Jimp.read(url, (err, image) => {
-        console.log(image);
-    });
-    // if(typeof type == 'function'){
-    //     callback = type;
-    //     type = null;
-    // }
-    // getPixels(url, type, function(err, pixels){
-    //     if(err) return callback(err);
-    //     console.log( pixels );
-    //     // callback(new Image(pixels));
-    // });
-};
-
-
-/***/ }),
-/* 217 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(Buffer) {/*
-Jimp v0.2.28
-https://github.com/oliver-moran/jimp
-Ported for the Web by Phil Seaton
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Oliver Moran
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
-
-var window = window || self;
-//    The MIT License (MIT)
-//
-//    Copyright (c) 2015 Phil Seaton
-//
-//    Permission is hereby granted, free of charge, to any person obtaining a copy
-//    of this software and associated documentation files (the "Software"), to deal
-//    in the Software without restriction, including without limitation the rights
-//    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//    copies of the Software, and to permit persons to whom the Software is
-//    furnished to do so, subject to the following conditions:
-//
-//    The above copyright notice and this permission notice shall be included in all
-//    copies or substantial portions of the Software.
-//
-//    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//    SOFTWARE.
-
-if (!self.Buffer && !window.Buffer){
-    throw new Error("Node's Buffer() not available");
-} else if (!self.Jimp && !window.Jimp) {
-    throw new Error("Could not Jimp object");
-}
-
-(function(){
-    
-    function fetchImageDataFromUrl(url, cb) {
-        // Fetch image data via xhr. Note that this will not work
-        // without cross-domain allow-origin headers because of CORS restrictions
-        var xhr = new XMLHttpRequest();
-        xhr.open( "GET", url, true );
-        xhr.responseType = "arraybuffer";
-        xhr.onload = function() {
-            if (xhr.status < 400) cb(this.response,null);
-            else cb(null,"HTTP Status " + xhr.status + " for url "+url);
-        };
-        xhr.onerror = function(e){
-            cb(null,e);
-        };
-
-        xhr.send();
-    };
-    
-    function bufferFromArrayBuffer(arrayBuffer) {
-        // Prepare a Buffer object from the arrayBuffer. Necessary in the browser > node conversion,
-        // But this function is not useful when running in node directly
-        var buffer = new Buffer(arrayBuffer.byteLength);
-        var view = new Uint8Array(arrayBuffer);
-        for (var i = 0; i < buffer.length; ++i) {
-            buffer[i] = view[i];
-        }
-
-        return buffer;
-    }
-    
-    function isArrayBuffer(test) {
-        return Object.prototype.toString.call(test).toLowerCase().indexOf("arraybuffer") > -1;
-    }
-
-    // delete the write method
-    delete Jimp.prototype.write;
-    
-    // Override the nodejs implementation of Jimp.read()
-    delete Jimp.read;
-    Jimp.read = function(src, cb) {
-        return new Promise(function(resolve, reject) {
-                cb = cb || function(err, image) {
-                    if (err) reject(err);
-                    else resolve(image);
-                };
-
-                if ("string" == typeof src) {
-                    // Download via xhr
-                    fetchImageDataFromUrl(src,function(arrayBuffer,error){
-                        if (arrayBuffer) {
-                            if (!isArrayBuffer(arrayBuffer)) {
-                                cb(new Error("Unrecognized data received for " + src));
-                            } else {
-                                new Jimp(bufferFromArrayBuffer(arrayBuffer),cb);
-                            }
-                        } else if (error) {
-                            cb(error);
-                        }
-                    });
-                } else if (isArrayBuffer(src)) {
-                    // src is an ArrayBuffer already
-                    new Jimp(bufferFromArrayBuffer(src), cb);
-                } else {
-                    // src is not a string or ArrayBuffer
-                    cb(new Error("Jimp expects a single ArrayBuffer or image URL"));
-                }
-        });
-    }
-    
-})();
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5).Buffer))
-
-/***/ }),
-/* 218 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(1);
 class PImageNode extends xml_node_1.XMLNode {
@@ -55811,7 +55483,7 @@ exports.default = PImageNode;
 
 
 /***/ }),
-/* 219 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
