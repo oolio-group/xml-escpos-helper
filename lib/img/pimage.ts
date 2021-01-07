@@ -1,5 +1,3 @@
-const getPixels = require("get-pixels");
-
 class PImage {
   public pixels;
   public data;
@@ -128,24 +126,6 @@ class PImage {
       height: height,
     };
   }
-
-  /**
-   * [load description]
-   * @param  {[type]}   url      [description]
-   * @param  {[type]}   type     [description]
-   * @param  {Function} callback [description]
-   * @return {[type]}            [description]
-   */
-  public load(url, type, callback) {
-    if (typeof type == "function") {
-      callback = type;
-      type = null;
-    }
-    getPixels(url, type, function (err, pixels) {
-      if (err) return callback(err);
-      callback(new PImage(pixels));
-    });
-  }
 }
 
 // /**
@@ -157,9 +137,4 @@ class PImage {
 //     return new Image(pixels);
 
 // };
-
-/**
- * [exports description]
- * @type {[type]}
- */
 export default PImage;

@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "target": "es2015",
     "outDir": "./dist/",
-    "lib": ["es2017", "dom"]
+    "lib": ["es6", "dom"]
   },
   "include": ["lib/**/*.ts"],
   "exclude": ["node_modules"],
