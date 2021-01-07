@@ -36,8 +36,11 @@ export default class PImageNode extends XMLNode {
       // bufferBuilder.startPImage(imagePx, this.attributes.density);
     //   return bufferBuilder;
     // });
+    console.log('start to print image -------------------------------------');
     (async () => {
       try {
+    console.log('inside trycatch block start to print image -------------------------------------');
+
           const content = await getPixelsAsync(this.attributes.image);
           console.log('promisified result bello ', content)
       } catch (err) {
