@@ -31226,7 +31226,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(21), exports);
 __exportStar(__webpack_require__(15), exports);
 __exportStar(__webpack_require__(6), exports);
-__exportStar(__webpack_require__(255), exports);
+__exportStar(__webpack_require__(256), exports);
 
 
 /***/ }),
@@ -55968,6 +55968,7 @@ var jpeg = __webpack_require__(246);
 // var request = require("request");
 var mime = __webpack_require__(249);
 var parseDataURI = __webpack_require__(253);
+var fetch = __webpack_require__(255);
 
 function handlePNG(data, cb) {
   var png = new PNG();
@@ -66832,6 +66833,37 @@ function dataUriToBuffer (uri) {
 
 /***/ }),
 /* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// ref: https://github.com/tc39/proposal-global
+var getGlobal = function () {
+	// the only reliable means to get the global object is
+	// `Function('return this')()`
+	// However, this causes CSP violations in Chrome apps.
+	if (typeof self !== 'undefined') { return self; }
+	if (typeof window !== 'undefined') { return window; }
+	if (typeof global !== 'undefined') { return global; }
+	throw new Error('unable to locate global object');
+}
+
+var global = getGlobal();
+
+module.exports = exports = global.fetch;
+
+// Needed for TypeScript and Webpack.
+if (global.fetch) {
+	exports.default = global.fetch.bind(global);
+}
+
+exports.Headers = global.Headers;
+exports.Request = global.Request;
+exports.Response = global.Response;
+
+/***/ }),
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
