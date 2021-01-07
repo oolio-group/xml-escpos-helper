@@ -204,7 +204,7 @@ export class BufferBuilder {
 const     EOL= '\n'
 
     if (!(image instanceof PImage))
-      throw new TypeError("Only escpos.Image supported");
+      throw new TypeError("Only escpos.PImage supported");
     density = density || "d24";
     var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
     var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];

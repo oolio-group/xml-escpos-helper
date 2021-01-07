@@ -41,7 +41,14 @@ export default class PImageNode extends XMLNode {
       try {
         console.log('inside trycatch block start to print image -------------------------------------', this.attributes);
 
-          const content = await getPixelsAsync(this.attributes.image);
+          const content = await getPixelsAsync(this.attributes.image,  (err, pixels) => {
+              if (err) {
+                console.log('getPixels error bello --------', err)
+              };
+          console.log('promisified result pixels------------- ', pixels)
+
+              // callback(new PImage(pixels));
+            });
           console.log('promisified result bello ', content)
       } catch (err) {
         console.log('promisified error bello ', err)

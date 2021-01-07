@@ -128,13 +128,4 @@ class PImage {
   }
 }
 
-// /**
-//  * [Image description]
-//  * @param {[type]} pixels [description]
-//  */
-// function Image(pixels){
-//   if(!(this instanceof Image))
-//     return new Image(pixels);
-
-// };
 export default PImage;
