@@ -1,6 +1,6 @@
 import { XMLNode } from '../xml-node';
 import { BufferBuilder } from '../buffer-builder';
-import Image from '../pimage';
+import Image from '../img/pimage';
 
 export default class PImageNode extends XMLNode {
 

@@ -1,6 +1,6 @@
 import { Command } from "./command";
 import { MutableBuffer } from "mutable-buffer";
-import Image from './pimage'
+import Image from './img/pimage'
 export class BufferBuilder {
   private buffer: MutableBuffer;
 
