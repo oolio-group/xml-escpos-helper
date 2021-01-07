@@ -1125,7 +1125,7 @@ get-pixels@*:
 
 "get-pixels@https://github.com/lakshmaji-till/get-pixels.git":
   version "3.3.2"
-  resolved "https://github.com/lakshmaji-till/get-pixels.git#e9a5e2a781102f17558e855100e199b4c7d2d304"
+  resolved "https://github.com/lakshmaji-till/get-pixels.git#aee5d14ca9af35d9a60fb55806b8bacfd047e2c8"
   dependencies:
     data-uri-to-buffer "0.0.3"
     jpeg-js "^0.3.2"
@@ -1133,7 +1133,6 @@ get-pixels@*:
     ndarray "^1.0.13"
     parse-data-uri "^0.2.0"
     pngjs "^3.3.3"
-    request "^2.44.0"
 
 get-stream@^3.0.0:
   version "3.0.0"
