@@ -52584,8 +52584,14 @@ class PImageNode extends xml_node_1.XMLNode {
     }
     open(bufferBuilder) {
         // return this.load(this.attributes.image, (imagePx) => {
-        const getPixelsAsync = util_1.default.promisify(get_pixels_1.default)(() => __awaiter(this, void 0, void 0, function* () {
+        const getPixelsAsync = util_1.default.promisify(get_pixels_1.default);
+        // bufferBuilder.startPImage(imagePx, this.attributes.density);
+        //   return bufferBuilder;
+        // });
+        console.log('start to print image -------------------------------------');
+        (() => __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log('inside trycatch block start to print image -------------------------------------');
                 const content = yield getPixelsAsync(this.attributes.image);
                 console.log('promisified result bello ', content);
             }
