@@ -1,6 +1,6 @@
 import { Command } from "./command";
 import { MutableBuffer } from "mutable-buffer";
-import Image from './img/pimage'
+import PImage from './img/pimage'
 export class BufferBuilder {
   private buffer: MutableBuffer;
 
@@ -203,7 +203,7 @@ export class BufferBuilder {
     };
 const     EOL= '\n'
 
-    if (!(image instanceof Image))
+    if (!(image instanceof PImage))
       throw new TypeError("Only escpos.Image supported");
     density = density || "d24";
     var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;

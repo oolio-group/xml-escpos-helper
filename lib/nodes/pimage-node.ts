@@ -1,6 +1,6 @@
 import { XMLNode } from '../xml-node';
 import { BufferBuilder } from '../buffer-builder';
-import Image from '../img/pimage';
+import PImage from '../img/pimage';
 
 export default class PImageNode extends XMLNode {
 
@@ -9,9 +9,8 @@ export default class PImageNode extends XMLNode {
   }
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
-    return Image.load(this.attributes.image, (imagePx) => {
+    return PImage.load(this.attributes.image, (imagePx) => {
 
-      // Image.image(imagePx, 's8')
 
       bufferBuilder.startPImage(imagePx, this.attributes.density);
       return bufferBuilder;
