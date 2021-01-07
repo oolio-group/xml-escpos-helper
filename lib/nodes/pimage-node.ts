@@ -28,7 +28,7 @@ export default class PImageNode extends XMLNode {
   }
 
 
-  public open(bufferBuilder: BufferBuilder): BufferBuilder {
+  public async open(bufferBuilder: BufferBuilder): Promise<BufferBuilder> {
     // return this.load(this.attributes.image, (imagePx) => {
 
     const getPixelsAsync = util.promisify(getPixels)
@@ -37,16 +37,18 @@ export default class PImageNode extends XMLNode {
     //   return bufferBuilder;
     // });
     console.log('start to print image -------------------------------------');
-    (async () => {
+    // (async () => {
       try {
-    console.log('inside trycatch block start to print image -------------------------------------');
+        console.log('inside trycatch block start to print image -------------------------------------', this.attributes);
 
           const content = await getPixelsAsync(this.attributes.image);
           console.log('promisified result bello ', content)
       } catch (err) {
         console.log('promisified error bello ', err)
       }
-    })();
+    // })();
+    console.log('endof to print image -------------------------------------');
+
 
     // getPixels(this.attributes.image, function (err, pixels) {
     //   if (err) return callback(err);

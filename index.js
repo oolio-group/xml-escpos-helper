@@ -52583,27 +52583,30 @@ class PImageNode extends xml_node_1.XMLNode {
         }
     }
     open(bufferBuilder) {
-        // return this.load(this.attributes.image, (imagePx) => {
-        const getPixelsAsync = util_1.default.promisify(get_pixels_1.default);
-        // bufferBuilder.startPImage(imagePx, this.attributes.density);
-        //   return bufferBuilder;
-        // });
-        console.log('start to print image -------------------------------------');
-        (() => __awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
+            // return this.load(this.attributes.image, (imagePx) => {
+            const getPixelsAsync = util_1.default.promisify(get_pixels_1.default);
+            // bufferBuilder.startPImage(imagePx, this.attributes.density);
+            //   return bufferBuilder;
+            // });
+            console.log('start to print image -------------------------------------');
+            // (async () => {
             try {
-                console.log('inside trycatch block start to print image -------------------------------------');
+                console.log('inside trycatch block start to print image -------------------------------------', this.attributes);
                 const content = yield getPixelsAsync(this.attributes.image);
                 console.log('promisified result bello ', content);
             }
             catch (err) {
                 console.log('promisified error bello ', err);
             }
-        }))();
-        // getPixels(this.attributes.image, function (err, pixels) {
-        //   if (err) return callback(err);
-        //   callback(new PImage(pixels));
-        // });
-        return bufferBuilder;
+            // })();
+            console.log('endof to print image -------------------------------------');
+            // getPixels(this.attributes.image, function (err, pixels) {
+            //   if (err) return callback(err);
+            //   callback(new PImage(pixels));
+            // });
+            return bufferBuilder;
+        });
     }
     close(bufferBuilder) {
         return bufferBuilder;
