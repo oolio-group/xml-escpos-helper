@@ -209,7 +209,6 @@ const     EOL= '\n'
     var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
     var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
     var bitmap = image.toBitmap(n * 8);
-    var self = this;
 
     // added a delay so the printer can process the graphical data
     // when connected via slower connection ( e.g.: Serial)
