@@ -55970,6 +55970,7 @@ var mime = __webpack_require__(249);
 var parseDataURI = __webpack_require__(253);
 var nodeFetch = __webpack_require__(255);
 
+
 function handlePNG(data, cb) {
   var png = new PNG();
   png.parse(data, function (err, img_data) {
@@ -56056,15 +56057,15 @@ module.exports = async function getPixels(url, type, cb) {
     try {
 
       const response = await nodeFetch(url);
-      const buffer = await response.buffer();
+      // const buffer = await response.buffer();
   
-      console.log('get-pixels buffer', buffer)
-      const typeOfRes = await fileType.fromBuffer(buffer)
-      console.log('get-pixelstypeOfRes ', typeOfRes)
+      console.log('get-pixels buffer', response)
+      // const typeOfRes = await fileType.fromBuffer(buffer)
+      // console.log('get-pixelstypeOfRes ', typeOfRes)
       
-      if(type, buffer, cb) {
-        doParse(type, buffer, cb);
-      }    
+      // if(type, buffer, cb) {
+      //   doParse(type, buffer, cb);
+      // }    
 
     } catch(err) {
       console.log('get-pixels  err', err)
