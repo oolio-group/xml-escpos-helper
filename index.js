@@ -31226,7 +31226,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(21), exports);
 __exportStar(__webpack_require__(15), exports);
 __exportStar(__webpack_require__(6), exports);
-__exportStar(__webpack_require__(256), exports);
+__exportStar(__webpack_require__(257), exports);
 
 
 /***/ }),
@@ -55969,6 +55969,7 @@ var jpeg = __webpack_require__(246);
 var mime = __webpack_require__(249);
 var parseDataURI = __webpack_require__(253);
 var nodeFetch = __webpack_require__(255);
+var toBuffer = __webpack_require__(256)
 
 
 function handlePNG(data, cb) {
@@ -56057,9 +56058,19 @@ module.exports = async function getPixels(url, type, cb) {
     try {
 
       const response = await nodeFetch(url);
-      console.log('get-pixels buffer', response)
+      console.log('get-pixels response', response)
       const blob = await response.blob();
       console.log('get-pixels blob', blob)
+
+      // var resultBlob = new Blob([ new Uint8Array([1, 2, 3]) ], { type: 'application/octet-binary' })
+ 
+toBuffer(blob, function (err, buffer) {
+  if (err) throw err
+ console.log('parse buffer from blob ', buffer)
+  // buffer[0] // => 1
+  // buffer.readUInt8(1) // => 2
+})
+
   
       // const typeOfRes = await fileType.fromBuffer(buffer)
       // console.log('get-pixelstypeOfRes ', typeOfRes)
@@ -67405,6 +67416,35 @@ module.exports = exports
 
 /***/ }),
 /* 256 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(Buffer) {/*! blob-to-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+/* global Blob, FileReader */
+
+module.exports = function blobToBuffer (blob, cb) {
+  if (typeof Blob === 'undefined' || !(blob instanceof Blob)) {
+    throw new Error('first argument must be a Blob')
+  }
+  if (typeof cb !== 'function') {
+    throw new Error('second argument must be a function')
+  }
+
+  const reader = new FileReader()
+
+  function onLoadEnd (e) {
+    reader.removeEventListener('loadend', onLoadEnd, false)
+    if (e.error) cb(e.error)
+    else cb(null, Buffer.from(reader.result))
+  }
+
+  reader.addEventListener('loadend', onLoadEnd, false)
+  reader.readAsArrayBuffer(blob)
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
+
+/***/ }),
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
