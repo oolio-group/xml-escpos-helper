@@ -56053,12 +56053,23 @@ module.exports = async function getPixels(url, type, cb) {
   } else if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
     type = type;
 
-    const response = await nodeFetch(url);
-    const buffer = await response.buffer();
-    const type = await fileType.fromBuffer(buffer)
-    if(type, buffer, cb) {
-      doParse(type, buffer, cb);
-    }    
+    try {
+
+      const response = await nodeFetch(url);
+      const buffer = await response.buffer();
+  
+      console.log('get-pixels buffer', buffer)
+      const typeOfRes = await fileType.fromBuffer(buffer)
+      console.log('get-pixelstypeOfRes ', typeOfRes)
+      
+      if(type, buffer, cb) {
+        doParse(type, buffer, cb);
+      }    
+
+    } catch(err) {
+      console.log('get-pixels  err', err)
+
+    }
 
     // nodeFetch(url)
     //   .then((response) => {
