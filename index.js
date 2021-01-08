@@ -55968,7 +55968,7 @@ var jpeg = __webpack_require__(246);
 // var request = require("request");
 var mime = __webpack_require__(249);
 var parseDataURI = __webpack_require__(253);
-var fetch = __webpack_require__(255);
+var nodeFetch = __webpack_require__(255);
 
 function handlePNG(data, cb) {
   var png = new PNG();
@@ -56022,7 +56022,7 @@ function doParse(mimeType, data, cb) {
   }
 }
 
-module.exports = function getPixels(url, type, cb) {
+module.exports = async function getPixels(url, type, cb) {
   if (!cb) {
     cb = type;
     type = "";
@@ -56053,29 +56053,36 @@ module.exports = function getPixels(url, type, cb) {
   } else if (url.indexOf("http://") === 0 || url.indexOf("https://") === 0) {
     type = type;
 
-    fetch(url)
-      .then((response) => {
-        if (!type) {
-          if (response.headers.get !== undefined) {
-            type = response.headers.get("content-type");
-          }
-          return response.buffer();
-        }
-      })
-      .then((buffer) => {
-        console.log("bello fetch body", b);
-        if (!type) {
-          cb(new Error("Invalid content-type"));
-          return;
-        }
+    const response = await nodeFetch(url);
+    const buffer = await response.buffer();
+    const type = await fileType.fromBuffer(buffer)
+    if(type, buffer, cb) {
+      doParse(type, buffer, cb);
+    }    
 
-        doParse(type, buffer, cb);
-      })
-      .catch((err) => {
-        console.log("err", err);
-        cb(err);
-        return;
-      });
+    // nodeFetch(url)
+    //   .then((response) => {
+    //     if (!type) {
+    //       if (response.headers.get !== undefined) {
+    //         type = response.headers.get("content-type");
+    //       }
+    //       return response.buffer();
+    //     }
+    //   })
+    //   .then((buffer) => {
+    //     console.log("bello fetch body", b);
+    //     if (!type) {
+    //       cb(new Error("Invalid content-type"));
+    //       return;
+    //     }
+
+    //     doParse(type, buffer, cb);
+    //   })
+    //   .catch((err) => {
+    //     console.log("err", err);
+    //     cb(err);
+    //     return;
+    //   });
 
     // request({ url: url, encoding: null }, function (err, response, body) {
     //   if (err) {

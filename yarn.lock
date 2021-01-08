@@ -996,7 +996,7 @@ get-caller-file@^1.0.1:
 
 "get-pixels@https://github.com/lakshmaji-till/get-pixels.git":
   version "3.3.2"
-  resolved "https://github.com/lakshmaji-till/get-pixels.git#647fc77182a8122f4b701c93dedc8694a10478d4"
+  resolved "https://github.com/lakshmaji-till/get-pixels.git#18073080c477d8758705557f351736fa7fde0923"
   dependencies:
     data-uri-to-buffer "0.0.3"
     jpeg-js "^0.3.2"
