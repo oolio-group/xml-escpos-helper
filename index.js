@@ -56057,9 +56057,10 @@ module.exports = async function getPixels(url, type, cb) {
     try {
 
       const response = await nodeFetch(url);
-      // const buffer = await response.buffer();
-  
       console.log('get-pixels buffer', response)
+      const blob = await response.blob();
+      console.log('get-pixels blob', blob)
+  
       // const typeOfRes = await fileType.fromBuffer(buffer)
       // console.log('get-pixelstypeOfRes ', typeOfRes)
       

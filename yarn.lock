@@ -1003,7 +1003,7 @@ get-caller-file@^1.0.1:
 
 "get-pixels@https://github.com/lakshmaji-till/get-pixels.git":
   version "3.3.2"
-  resolved "https://github.com/lakshmaji-till/get-pixels.git#68cf05a7a55621a75e0e8db457f43c2de1642746"
+  resolved "https://github.com/lakshmaji-till/get-pixels.git#8973bc66fdbdaf11e97b717d4f953bb454f665e5"
   dependencies:
     cross-fetch "^3.0.6"
     data-uri-to-buffer "0.0.3"
