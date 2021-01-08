@@ -56059,7 +56059,7 @@ module.exports = function getPixels(url, type, cb) {
           if (response.headers.get !== undefined) {
             type = response.headers.get("content-type");
           }
-          return response.arrayBuffer();
+          return response.buffer();
         }
       })
       .then((buffer) => {
