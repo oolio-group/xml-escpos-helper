@@ -34,7 +34,6 @@
     "url": "https://github.com/ingoncalves/escpos-xml/issues"
   },
   "dependencies": {
-    "get-pixels": "https://github.com/lakshmaji-till/get-pixels.git",
     "handlebars": "^4.0.10",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",

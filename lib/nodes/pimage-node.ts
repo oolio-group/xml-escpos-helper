@@ -1,6 +1,6 @@
 import { XMLNode } from '../xml-node';
 import { BufferBuilder } from '../buffer-builder';
-import getPixels from "get-pixels";
+// import getPixels from "get-pixels";
 // import util from 'util';
 // import Jimp from  'jimp';
 // import ndarray from 'ndarray';
