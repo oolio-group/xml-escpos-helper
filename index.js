@@ -5952,14 +5952,14 @@ class BufferBuilder {
             BITMAP_D24: '\x1b\x2a\x21'
         };
         const EOL = '\n';
-        if (!(image instanceof pimage_1.default)) {
-            image = new pimage_1.default(image);
-            // throw new TypeError("Only escpos.PImage supported");
+        const imagePx = new pimage_1.default(image);
+        if (!(imagePx instanceof pimage_1.default)) {
+            throw new TypeError("Only escpos.PImage supported");
         }
         density = density || "d24";
         var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
         var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-        var bitmap = image.toBitmap(n * 8);
+        var bitmap = imagePx.toBitmap(n * 8);
         // added a delay so the printer can process the graphical data
         // when connected via slower connection ( e.g.: Serial)
         this.breakLine(0); // set line spacing to 0
@@ -48365,8 +48365,6 @@ module.exports = Array.isArray || function (arr) {
 Object.defineProperty(exports, "__esModule", { value: true });
 class PImage {
     constructor(pixels) {
-        if (!(this instanceof PImage))
-            return new PImage(pixels);
         this.pixels = pixels;
         this.data = [];
         function rgb(pixel) {

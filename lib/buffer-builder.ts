@@ -203,14 +203,14 @@ export class BufferBuilder {
     };
 const     EOL= '\n'
 
-    if (!(image instanceof PImage)) {
-      image = new PImage(image)
-      // throw new TypeError("Only escpos.PImage supported");
+    const imagePx = new PImage(image)
+    if (!(imagePx instanceof PImage)) {
+      throw new TypeError("Only escpos.PImage supported");
     }
     density = density || "d24";
     var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
     var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-    var bitmap = image.toBitmap(n * 8);
+    var bitmap = imagePx.toBitmap(n * 8);
 
     // added a delay so the printer can process the graphical data
     // when connected via slower connection ( e.g.: Serial)

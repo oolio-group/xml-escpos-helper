@@ -2,10 +2,6 @@ class PImage {
   public pixels;
   public data;
   constructor(pixels) {
-
-    if(!(this instanceof PImage))
-      return new PImage(pixels);
-
     this.pixels = pixels;
 
     this.data = [];
