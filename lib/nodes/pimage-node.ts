@@ -30,31 +30,33 @@ export default class PImageNode extends XMLNode {
   }
 
 
-  public async open(bufferBuilder: BufferBuilder): Promise<BufferBuilder> {
+  public open(bufferBuilder: BufferBuilder): BufferBuilder {
     // return this.load(this.attributes.image, (imagePx) => {
 
     // const getPixelsAsync = util.promisify(getPixels)
 
-    //   // bufferBuilder.startPImage(imagePx, this.attributes.density);
+    let content = this.getContent();
+    // .replace(/&nbsp;/g, ' ');
+      bufferBuilder.startPImage(content, this.attributes.density);
     // //   return bufferBuilder;
     // // });
     // console.log('start to print image -------------------------------------');
     // (async () => {
-      try {
-        console.log('inside trycatch block start to print image -------------------------------------', this.attributes);
+      // try {
+      //   console.log('inside trycatch block start to print image -------------------------------------', this.attributes);
 
-          const content = await getPixels(this.attributes.image,  (err, pixels) => {
-              if (err) {
-                console.log('getPixels error bello --------', err)
-              };
-          console.log('promisified result pixels------------- ', pixels)
+      //     const content = await getPixels(this.attributes.image,  (err, pixels) => {
+      //         if (err) {
+      //           console.log('getPixels error bello --------', err)
+      //         };
+      //     console.log('promisified result pixels------------- ', pixels)
 
-              // callback(new PImage(pixels));
-            });
-          console.log('promisified result bello ', content)
-      } catch (err) {
-        console.log('promisified error bello ', err)
-      }
+      //         // callback(new PImage(pixels));
+      //       });
+      //     console.log('promisified result bello ', content)
+      // } catch (err) {
+      //   console.log('promisified error bello ', err)
+      // }
     // })();
     // console.log('endof to print image -------------------------------------');
 
