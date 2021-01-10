@@ -5952,8 +5952,10 @@ class BufferBuilder {
             BITMAP_D24: '\x1b\x2a\x21'
         };
         const EOL = '\n';
-        if (!(image instanceof pimage_1.default))
-            throw new TypeError("Only escpos.PImage supported");
+        if (!(image instanceof pimage_1.default)) {
+            image = new pimage_1.default(image);
+            // throw new TypeError("Only escpos.PImage supported");
+        }
         density = density || "d24";
         var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
         var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
@@ -48363,6 +48365,8 @@ module.exports = Array.isArray || function (arr) {
 Object.defineProperty(exports, "__esModule", { value: true });
 class PImage {
     constructor(pixels) {
+        if (!(this instanceof PImage))
+            return new PImage(pixels);
         this.pixels = pixels;
         this.data = [];
         function rgb(pixel) {
