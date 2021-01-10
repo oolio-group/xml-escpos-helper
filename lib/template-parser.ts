@@ -22,6 +22,7 @@ export class TemplateParser {
     this.handlebars = handlebars;
     this.registerMoment();
     this.registerNumeral();
+    this.registerBArray();
   }
 
   private registerMoment() {
@@ -63,6 +64,18 @@ export class TemplateParser {
       }
 
       return this.numeral(context).format(block.hash.format);
+    });
+  }
+
+  private registerBArray() {
+    this.handlebars.registerHelper('barray', (context, block) => {
+      // if (context && context.hash) {
+      //   block = cloneDeep(context);
+      //   context = undefined;
+      // }
+
+      console.log('barray inputs', context, block)
+      return [[1,2,3], [4,5,6]];
     });
   }
 

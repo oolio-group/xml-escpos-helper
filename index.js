@@ -6129,6 +6129,7 @@ class TemplateParser {
         this.handlebars = handlebars;
         this.registerMoment();
         this.registerNumeral();
+        this.registerBArray();
     }
     registerMoment() {
         this.handlebars.registerHelper('moment', (context, block) => {
@@ -6162,6 +6163,16 @@ class TemplateParser {
                 context = undefined;
             }
             return this.numeral(context).format(block.hash.format);
+        });
+    }
+    registerBArray() {
+        this.handlebars.registerHelper('barray', (context, block) => {
+            // if (context && context.hash) {
+            //   block = cloneDeep(context);
+            //   context = undefined;
+            // }
+            console.log('barray inputs', context, block);
+            return [[1, 2, 3], [4, 5, 6]];
         });
     }
     parser(template, scope) {
