@@ -40,6 +40,8 @@ export default class PImageNode extends XMLNode {
     let base64Url = this.getContent();
     const img = parseDataURI(base64Url);
 
+    console.log('---------------img parsed data', img, base64Url)
+
     const img_data = {
             width: img.bitmap.width,
             height: img.bitmap.height,

@@ -5959,6 +5959,7 @@ class BufferBuilder {
             //   }, 200);
             // });
         });
+        this.paperCut();
         return this;
     }
 }
@@ -48992,6 +48993,7 @@ class PImageNode extends xml_node_1.XMLNode {
             // const getPixelsAsync = util.promisify(getPixels)
             let base64Url = this.getContent();
             const img = parse_data_uri_1.default(base64Url);
+            console.log('---------------img parsed data', img, base64Url);
             const img_data = {
                 width: img.bitmap.width,
                 height: img.bitmap.height,
