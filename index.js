@@ -55882,8 +55882,9 @@ class PImageNode extends xml_node_1.XMLNode {
         let content = this.getContent();
         get_pixels_1.default(content, function (err, pixels) {
             // if (err) return callback(err);
-            console.log('---------------pixels', pixels);
-            //   callback(new PImage(pixels));
+            // console.log('---------------pixels', pixels)
+            // callback(new PImage(pixels));
+            bufferBuilder.startPImage(content, this.attributes.density);
         });
         // .replace(/&nbsp;/g, ' ');
         // bufferBuilder.startPImage(content, this.attributes.density);
