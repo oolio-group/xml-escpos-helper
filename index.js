@@ -55895,7 +55895,7 @@ class PImageNode extends xml_node_1.XMLNode {
             const bufferData = parse_data_uri_1.default(base64Url);
             var png = new PNG();
             const resultNdArr = yield new Promise((res, rej) => {
-                png.parse(bufferData, (err, img_data) => {
+                png.parse(bufferData.data, (err, img_data) => {
                     if (err) {
                         rej(err);
                         return;
