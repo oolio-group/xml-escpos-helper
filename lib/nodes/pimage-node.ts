@@ -37,7 +37,7 @@ export default class PImageNode extends XMLNode {
 
     let content = this.getContent();
 
-    getPixels(content, function (err, pixels) {
+    getPixels(content,  (err, pixels) => {
       // if (err) return callback(err);
       // console.log('---------------pixels', pixels)
       // callback(new PImage(pixels));

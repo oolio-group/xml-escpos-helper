@@ -55880,7 +55880,7 @@ class PImageNode extends xml_node_1.XMLNode {
         // return this.load(this.attributes.image, (imagePx) => {
         // const getPixelsAsync = util.promisify(getPixels)
         let content = this.getContent();
-        get_pixels_1.default(content, function (err, pixels) {
+        get_pixels_1.default(content, (err, pixels) => {
             // if (err) return callback(err);
             // console.log('---------------pixels', pixels)
             // callback(new PImage(pixels));
