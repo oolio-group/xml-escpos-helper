@@ -41,6 +41,7 @@
     "ndarray": "^1.0.19",
     "numeral": "^2.0.6",
     "parse-data-uri": "^0.2.0",
+    "pngjs": "^6.0.0",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {

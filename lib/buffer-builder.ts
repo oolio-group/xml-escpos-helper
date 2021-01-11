@@ -208,6 +208,7 @@ export class BufferBuilder {
     // added a delay so the printer can process the graphical data
     // when connected via slower connection ( e.g.: Serial)
     this.breakLine(0); // set line spacing to 0
+    // this.buffer.write(Command.ESC_akp());
     bitmap.data.forEach( (line) => {
       this.buffer.write(header);
       this.buffer.writeUInt16LE(line.length / n);
@@ -219,6 +220,7 @@ export class BufferBuilder {
       //   }, 200);
       // });
     });
+    // this.buffer.write(data, "ascii");
     this.paperCut()
     return this;
   }
