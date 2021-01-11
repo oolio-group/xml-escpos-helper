@@ -1,6 +1,8 @@
 import { XMLNode } from '../xml-node';
 import { BufferBuilder } from '../buffer-builder';
-import getPixels from "get-pixels";
+import parseDataURI from "parse-data-uri";
+import ndarray from "ndarray";
+import PImage from '../img/pimage'
 // import util from 'util';
 // import Jimp from  'jimp';
 // import ndarray from 'ndarray';
@@ -35,9 +37,21 @@ export default class PImageNode extends XMLNode {
 
     // const getPixelsAsync = util.promisify(getPixels)
 
-    let content = this.getContent();
+    let base64Url = this.getContent();
+    const img = parseDataURI(base64Url);
 
-    const result = await getPixels(content);
+    const img_data = {
+            width: img.bitmap.width,
+            height: img.bitmap.height,
+            data: img.bitmap.data,
+          };
+          const ndArrRefPx = ndarray(
+            new Uint8Array(img_data.data),
+            [img_data.width | 0, img_data.height | 0, 4],
+            [4, (4 * img_data.width) | 0, 1],
+            0
+          );
+    // const result = await getPixels(content);
     // getPixels(content,  (err, pixels) => {
     //   // if (err) return callback(err);
     //   // console.log('---------------pixels', pixels)
@@ -45,7 +59,7 @@ export default class PImageNode extends XMLNode {
     //   bufferBuilder.startPImage(pixels, this.attributes.density);
 
     // });
-    bufferBuilder.startPImage(result, this.attributes.density);
+    bufferBuilder.startPImage(new PImage(ndArrRefPx), this.attributes.density);
 
     // .replace(/&nbsp;/g, ' ');
       // bufferBuilder.startPImage(content, this.attributes.density);

@@ -1,6 +1,6 @@
 import { Command } from "./command";
 import { MutableBuffer } from "mutable-buffer";
-import PImage from './img/pimage'
+import PImage from "./img/pimage";
 export class BufferBuilder {
   private buffer: MutableBuffer;
 
@@ -187,50 +187,39 @@ export class BufferBuilder {
     return this;
   }
 
-  /**
-   * [image description]
-   * @param  {[type]} image   [description]
-   * @param  {[type]} density [description]
-   * @return {[Printer]} printer  [the escpos printer instance]
-   */
-  public writeImageBuffer(image, density) {
-
+  public startPImage(image, density): BufferBuilder {
     const BITMAP_FORMAT = {
-      BITMAP_S8: '\x1b\x2a\x00',
-      BITMAP_D8: '\x1b\x2a\x01',
-      BITMAP_S24: '\x1b\x2a\x20',
-      BITMAP_D24: '\x1b\x2a\x21'
+      BITMAP_S8: "\x1b\x2a\x00",
+      BITMAP_D8: "\x1b\x2a\x01",
+      BITMAP_S24: "\x1b\x2a\x20",
+      BITMAP_D24: "\x1b\x2a\x21",
     };
-const     EOL= '\n'
+    const EOL = "\n";
 
-    const imagePx = new PImage(image)
-    if (!(imagePx instanceof PImage)) {
+    // const imagePx = new PImage(image)
+    if (!(image instanceof PImage)) {
       throw new TypeError("Only escpos.PImage supported");
     }
     density = density || "d24";
     var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
     var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-    var bitmap = imagePx.toBitmap(n * 8);
+    var bitmap = image.toBitmap(n * 8);
 
     // added a delay so the printer can process the graphical data
     // when connected via slower connection ( e.g.: Serial)
     this.breakLine(0); // set line spacing to 0
-    bitmap.data.forEach(async (line) => {
+    bitmap.data.forEach( (line) => {
       this.buffer.write(header);
       this.buffer.writeUInt16LE(line.length / n);
       this.buffer.write(line);
       this.buffer.write(EOL);
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(true);
-        }, 200);
-      });
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(true);
+      //   }, 200);
+      // });
     });
-    return this.breakLine();
-  }
-
-  public startPImage(image, density): BufferBuilder {
-     this.writeImageBuffer(image, density);
+    this.paperCut()
     return this;
   }
 }

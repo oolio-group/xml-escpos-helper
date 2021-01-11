@@ -34,13 +34,13 @@
     "url": "https://github.com/ingoncalves/escpos-xml/issues"
   },
   "dependencies": {
-    "get-pixels": "https://github.com/lakshmaji-till/get-pixels.git",
     "handlebars": "^4.0.10",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mutable-buffer": "2.0.3",
     "ndarray": "^1.0.19",
     "numeral": "^2.0.6",
+    "parse-data-uri": "^0.2.0",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
