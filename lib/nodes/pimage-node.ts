@@ -30,20 +30,23 @@ export default class PImageNode extends XMLNode {
   }
 
 
-  public open(bufferBuilder: BufferBuilder): BufferBuilder {
+  public async open(bufferBuilder: BufferBuilder): Promise<BufferBuilder> {
     // return this.load(this.attributes.image, (imagePx) => {
 
     // const getPixelsAsync = util.promisify(getPixels)
 
     let content = this.getContent();
 
-    getPixels(content,  (err, pixels) => {
-      // if (err) return callback(err);
-      // console.log('---------------pixels', pixels)
-      // callback(new PImage(pixels));
-      bufferBuilder.startPImage(pixels, this.attributes.density);
+    const result = await getPixels(content);
+    // getPixels(content,  (err, pixels) => {
+    //   // if (err) return callback(err);
+    //   // console.log('---------------pixels', pixels)
+    //   // callback(new PImage(pixels));
+    //   bufferBuilder.startPImage(pixels, this.attributes.density);
 
-    });
+    // });
+    bufferBuilder.startPImage(result, this.attributes.density);
+
     // .replace(/&nbsp;/g, ' ');
       // bufferBuilder.startPImage(content, this.attributes.density);
     // //   return bufferBuilder;
