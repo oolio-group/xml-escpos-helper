@@ -38,11 +38,11 @@ export default class PImageNode extends XMLNode {
       let base64Url = this.getContent();
       const bufferData = parseDataURI(base64Url);
 
-      console.log("---------------img parsed data", bufferData, base64Url);
+      console.log("---------------img parsed data", bufferData);
 
       var png = new PNG();
       const resultNdArr = await new Promise((res, rej) => {
-        png.parse(bufferData, function (err, img_data) {
+        png.parse(bufferData,  (err, img_data) => {
           if (err) {
             rej(err);
             return;
