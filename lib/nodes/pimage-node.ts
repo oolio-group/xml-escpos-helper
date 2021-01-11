@@ -1,6 +1,6 @@
 import { XMLNode } from '../xml-node';
 import { BufferBuilder } from '../buffer-builder';
-// import getPixels from "get-pixels";
+import getPixels from "get-pixels";
 // import util from 'util';
 // import Jimp from  'jimp';
 // import ndarray from 'ndarray';
@@ -36,8 +36,14 @@ export default class PImageNode extends XMLNode {
     // const getPixelsAsync = util.promisify(getPixels)
 
     let content = this.getContent();
+
+    getPixels(content, function (err, pixels) {
+      // if (err) return callback(err);
+      console.log('---------------pixels', pixels)
+    //   callback(new PImage(pixels));
+    });
     // .replace(/&nbsp;/g, ' ');
-      bufferBuilder.startPImage(content, this.attributes.density);
+      // bufferBuilder.startPImage(content, this.attributes.density);
     // //   return bufferBuilder;
     // // });
     // console.log('start to print image -------------------------------------');
