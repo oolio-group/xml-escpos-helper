@@ -34,11 +34,9 @@ export default class PImageNode extends XMLNode {
 
     // const getPixelsAsync = util.promisify(getPixels)
 
-    try {
+    // try {
       let base64Url = this.getContent();
       const bufferData = parseDataURI(base64Url);
-
-      console.log("---------------img parsed data", bufferData);
 
       var png = new PNG();
       const resultNdArr = await new Promise((res, rej) => {
@@ -150,9 +148,9 @@ export default class PImageNode extends XMLNode {
       // });
 
       // });
-    } catch (err) {
-      console.log("pimage pixel conversion error ", err);
-    }
+    // } catch (err) {
+    //   console.log("pimage pixel conversion error ", err);
+    // }
 
     return bufferBuilder;
   }
