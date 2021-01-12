@@ -8522,7 +8522,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.STATUS_TYPE = exports.BITMAP_SCALE = exports.QR_EC_LEVEL = exports.BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_FONT = exports.BARCODE_WIDTH = exports.BARCODE_SYSTEM = exports.ALIGNMENT = exports.UNDERLINE_MODE = exports.BufferBuilder = void 0;
 const command_1 = __webpack_require__(188);
 const mutable_buffer_1 = __webpack_require__(189);
-const pimage_1 = __importDefault(__webpack_require__(160));
+const image_1 = __importDefault(__webpack_require__(160));
 class BufferBuilder {
     constructor(defaultSettings = true) {
         this.defaultSettings = defaultSettings;
@@ -8649,66 +8649,9 @@ class BufferBuilder {
         this.buffer.write(command_1.Command.GS_v(1));
         return this;
     }
-    printImage() {
-        this.buffer.write(command_1.Command.ESC_ak);
-        return this;
-    }
-    startPImage(image, density) {
-        // let bitmapFormat;
-        // switch (density) {
-        //   case "s8":
-        //     bitmapFormat = "\x1b\x2a\x00";
-        //     break;
-        //   case "d8":
-        //     bitmapFormat = "\x1b\x2a\x01";
-        //     break;
-        //   case "s24":
-        //     bitmapFormat = "\x1b\x2a\x20";
-        //     break;
-        //   case "d24":
-        //     bitmapFormat = "\x1b\x2a\x21";
-        //     break;
-        //   default:
-        //     console.warn("no bitmap format specified, using default d24");
-        //     bitmapFormat = "\x1b\x2a\x21";
-        // }
-        // // this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
-        // // this.buffer.write(Command.GS_h(162)); // height
-        // // this.buffer.write(Command.GS_x(0)); // left spacing
-        // // this.buffer.write(Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
-        // // this.buffer.write(Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
-        // // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
-        // // this.buffer.write("123456", "ascii");
-        //         const EOL = "\n";
-        // if (!(image instanceof PImage)) {
-        //   throw new TypeError("Only escpos.PImage supported");
-        // }
-        // density = density || "d24";
-        // var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
-        // // var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-        // var bitmap = image.toBitmap(n * 8);
-        // // added a delay so the printer can process the graphical data
-        // // when connected via slower connection ( e.g.: Serial)
-        // this.breakLine(0); // set line spacing to 0
-        // // this.buffer.write(Command.ESC_akp(32, 255, 3));
-        // // this.buffer.writeUInt16LE(bitmap.data.length); // data is a string in UTF-8
-        // // this.buffer.write(bitmap.data, "ascii");
-        // bitmap.data.forEach( (line) => {
-        //   this.buffer.write(bitmapFormat);
-        //   this.buffer.writeUInt16LE(line.length / n);
-        //   this.buffer.write(line);
-        //   this.buffer.write(EOL);
-        //   // await new Promise((resolve, reject) => {
-        //   //   setTimeout(() => {
-        //   //     resolve(true);
-        //   //   }, 200);
-        //   // });
-        // });
-        // // // this.buffer.write(data, "ascii");
-        // // this.paperCut()
-        // //     console.log("iiin uffer builder");
-        if (!(image instanceof pimage_1.default)) {
-            throw new TypeError("Only PImage supported");
+    printImage(image, density) {
+        if (!(image instanceof image_1.default)) {
+            throw new TypeError("not supported");
         }
         const mode = "normal";
         const GSV0_FORMAT = {
@@ -8719,8 +8662,7 @@ class BufferBuilder {
         };
         // if (mode === "dhdw" || mode === "dwh" || mode === "dhw") mode = "dwdh";
         const raster = image.toRaster();
-        const header = GSV0_FORMAT["GSV0_" + mode.toUpperCase()];
-        this.buffer.write(header);
+        this.buffer.write([0x1d, 0x76, 0x30, 0x00]);
         this.buffer.writeUInt16LE(raster.width);
         this.buffer.writeUInt16LE(raster.height);
         this.buffer.write(raster.data);
@@ -11884,7 +11826,6 @@ class TemplateParser {
         this.handlebars = handlebars;
         this.registerMoment();
         this.registerNumeral();
-        this.registerBArray();
     }
     registerMoment() {
         this.handlebars.registerHelper('moment', (context, block) => {
@@ -11918,16 +11859,6 @@ class TemplateParser {
                 context = undefined;
             }
             return this.numeral(context).format(block.hash.format);
-        });
-    }
-    registerBArray() {
-        this.handlebars.registerHelper('barray', (context, block) => {
-            // if (context && context.hash) {
-            //   block = cloneDeep(context);
-            //   context = undefined;
-            // }
-            console.log('barray inputs', context, block);
-            return [[1, 2, 3], [4, 5, 6]];
         });
     }
     parser(template, scope) {
@@ -28056,7 +27987,7 @@ module.exports = Array.isArray || function (arr) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-class PImage {
+class Image {
     constructor(pixels) {
         this.pixels = pixels;
         this.data = [];
@@ -28162,7 +28093,7 @@ class PImage {
         };
     }
 }
-exports.default = PImage;
+exports.default = Image;
 
 
 /***/ }),
@@ -55424,7 +55355,7 @@ const text_line_node_1 = __importDefault(__webpack_require__(202));
 const underline_node_1 = __importDefault(__webpack_require__(203));
 const white_mode_node_1 = __importDefault(__webpack_require__(204));
 const paper_cut_node_1 = __importDefault(__webpack_require__(205));
-const pimage_node_1 = __importDefault(__webpack_require__(206));
+const image_node_1 = __importDefault(__webpack_require__(206));
 class NodeFactory {
     static create(nodeType, node) {
         switch (nodeType) {
@@ -55441,7 +55372,7 @@ class NodeFactory {
             case 'underline': return new underline_node_1.default(node);
             case 'white-mode': return new white_mode_node_1.default(node);
             case 'paper-cut': return new paper_cut_node_1.default(node);
-            case 'pimage': return new pimage_node_1.default(node);
+            case 'image': return new image_node_1.default(node);
             default: return null;
         }
     }
@@ -55890,51 +55821,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-// import parseDataURI from "parse-data-uri";
 const ndarray_1 = __importDefault(__webpack_require__(207));
-const pimage_1 = __importDefault(__webpack_require__(160));
-// import util from 'util';
-// import Jimp from  'jimp';
-// import ndarray from 'ndarray';
+const image_1 = __importDefault(__webpack_require__(160));
 const pngjs_1 = __importDefault(__webpack_require__(210));
-// import UPNGJS from 'upng-js'
 const PNG = pngjs_1.default.PNG;
-class PImageNode extends xml_node_1.XMLNode {
+class ImageNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
     }
     open(bufferBuilder) {
-        // const bufferData = parseDataURI(this.content);
-        // var png = new PNG();
-        // const resultNdArr = await new Promise((res, rej) => {
-        //   png.parse(bufferData.data, (err, img_data) => {
-        //     if (err) {
-        //       rej(err);
-        //       return;
-        //     }
-        //     res(
-        //       ndarray(
-        //         new Uint8Array(img_data.data),
-        //         [img_data.width | 0, img_data.height | 0, 4],
-        //         [4, (4 * img_data.width) | 0, 1],
-        //         0
-        //       )
-        //     );
-        //   });
-        // });
-        const img_data = PNG.sync.read(Buffer.from(this.content.slice('data:image/png;base64,'.length), 'base64'));
-        // const img_data = UPNGJS.decode(bufferData.data)
+        const img_data = PNG.sync.read(Buffer.from(this.content.slice("data:image/png;base64,".length), "base64"));
         const pixels = ndarray_1.default(new Uint8Array(img_data.data), [img_data.width | 0, img_data.height | 0, 4], [4, (4 * img_data.width) | 0, 1], 0);
-        bufferBuilder.startPImage(new pimage_1.default(pixels), this.attributes.density);
-        // bufferBuilder.startPImage();
-        console.log('start printing image');
+        bufferBuilder.printImage(new image_1.default(pixels), this.attributes.density);
         return bufferBuilder;
     }
     close(bufferBuilder) {
         return bufferBuilder;
     }
 }
-exports.default = PImageNode;
+exports.default = ImageNode;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 

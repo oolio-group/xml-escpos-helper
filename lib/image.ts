@@ -1,4 +1,4 @@
-class PImage {
+class Image {
   public pixels;
   public data;
   constructor(pixels) {
@@ -128,4 +128,4 @@ class PImage {
   }
 }
 
-export default PImage;
+export default Image;

@@ -1,6 +1,6 @@
 import { Command } from "./command";
 import { MutableBuffer } from "mutable-buffer";
-import PImage from "./img/pimage";
+import Image from "./image";
 export class BufferBuilder {
   private buffer: MutableBuffer;
 
@@ -182,75 +182,9 @@ export class BufferBuilder {
     return this;
   }
 
-  public printImage(): BufferBuilder {
-    this.buffer.write(Command.ESC_ak);
-    return this;
-  }
-
-  public startPImage(image, density): BufferBuilder {
-    // let bitmapFormat;
-    // switch (density) {
-    //   case "s8":
-    //     bitmapFormat = "\x1b\x2a\x00";
-    //     break;
-    //   case "d8":
-    //     bitmapFormat = "\x1b\x2a\x01";
-    //     break;
-    //   case "s24":
-    //     bitmapFormat = "\x1b\x2a\x20";
-    //     break;
-    //   case "d24":
-    //     bitmapFormat = "\x1b\x2a\x21";
-    //     break;
-    //   default:
-    //     console.warn("no bitmap format specified, using default d24");
-    //     bitmapFormat = "\x1b\x2a\x21";
-    // }
-
-    // // this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
-    // // this.buffer.write(Command.GS_h(162)); // height
-    // // this.buffer.write(Command.GS_x(0)); // left spacing
-    // // this.buffer.write(Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
-    // // this.buffer.write(Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
-    // // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
-    // // this.buffer.write("123456", "ascii");
-
-    //         const EOL = "\n";
-
-    // if (!(image instanceof PImage)) {
-    //   throw new TypeError("Only escpos.PImage supported");
-    // }
-    // density = density || "d24";
-    // var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
-    // // var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-    // var bitmap = image.toBitmap(n * 8);
-
-    // // added a delay so the printer can process the graphical data
-    // // when connected via slower connection ( e.g.: Serial)
-    // this.breakLine(0); // set line spacing to 0
-
-    // // this.buffer.write(Command.ESC_akp(32, 255, 3));
-    // // this.buffer.writeUInt16LE(bitmap.data.length); // data is a string in UTF-8
-    // // this.buffer.write(bitmap.data, "ascii");
-
-    // bitmap.data.forEach( (line) => {
-    //   this.buffer.write(bitmapFormat);
-    //   this.buffer.writeUInt16LE(line.length / n);
-    //   this.buffer.write(line);
-    //   this.buffer.write(EOL);
-    //   // await new Promise((resolve, reject) => {
-    //   //   setTimeout(() => {
-    //   //     resolve(true);
-    //   //   }, 200);
-    //   // });
-    // });
-    // // // this.buffer.write(data, "ascii");
-    // // this.paperCut()
-
-    // //     console.log("iiin uffer builder");
-
-    if (!(image instanceof PImage)) {
-      throw new TypeError("Only PImage supported");
+  public printImage(image, density): BufferBuilder {
+    if (!(image instanceof Image)) {
+      throw new TypeError("not supported");
     }
     const mode = "normal";
     const GSV0_FORMAT = {
@@ -261,7 +195,6 @@ export class BufferBuilder {
     };
     // if (mode === "dhdw" || mode === "dwh" || mode === "dhw") mode = "dwdh";
     const raster = image.toRaster();
-    const header = GSV0_FORMAT["GSV0_" + mode.toUpperCase()];
     this.buffer.write([0x1d, 0x76, 0x30, 0x00]);
     this.buffer.writeUInt16LE(raster.width);
     this.buffer.writeUInt16LE(raster.height);
