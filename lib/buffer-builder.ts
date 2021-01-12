@@ -188,37 +188,34 @@ export class BufferBuilder {
   }
 
   public startPImage(image, density): BufferBuilder {
-    // public startPImage(): BufferBuilder {
+    let bitmapFormat;
+    switch (density) {
+      case "s8":
+        bitmapFormat = "\x1b\x2a\x00";
+        break;
+      case "d8":
+        bitmapFormat = "\x1b\x2a\x01";
+        break;
+      case "s24":
+        bitmapFormat = "\x1b\x2a\x20";
+        break;
+      case "d24":
+        bitmapFormat = "\x1b\x2a\x21";
+        break;
+      default:
+        console.warn("no bitmap format specified, using default d24");
+        bitmapFormat = "\x1b\x2a\x21";
+    }
 
-    // density = density || 'd24';
-    //         let bitmapFormat;
-    //         switch (density) {
-    //           case 's8':
-    //             bitmapFormat = '\x1b\x2a\x00';
-    //             break;
-    //           case 'd8':
-    //             bitmapFormat = '\x1b\x2a\x01';
-    //             break;
-    //           case 's24':
-    //             bitmapFormat = '\x1b\x2a\x20';
-    //             break;
-    //           case 'd24':
-    //               bitmapFormat = '\x1b\x2a\x21';
-    //             break;
-    //           default:
-    //             console.warn('no bitmap format specified, using default');
-    //             bitmapFormat = '\x1b\x2a\x00';
-    //         }
+    console.log("iiin uffer builder");
 
-    console.log('iiin uffer builder')
-
-            this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
-            this.buffer.write(Command.GS_h(162)); // height
-            this.buffer.write(Command.GS_x(0)); // left spacing
-            this.buffer.write(Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
-            this.buffer.write(Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
-            this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
-            this.buffer.write("123456", "ascii");
+    this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
+    this.buffer.write(Command.GS_h(162)); // height
+    this.buffer.write(Command.GS_x(0)); // left spacing
+    this.buffer.write(Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
+    this.buffer.write(Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
+    this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
+    this.buffer.write("123456", "ascii");
 
     //         const EOL = "\n";
 
