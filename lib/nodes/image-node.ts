@@ -1,5 +1,5 @@
 import { XMLNode } from "../xml-node";
-import { BufferBuilder } from "../buffer-builder";
+import { BufferBuilder, RASTER_MODE } from "../buffer-builder";
 import ndarray from "ndarray";
 import Image from "../image";
 import pngjs from "pngjs";
@@ -23,7 +23,21 @@ export default class ImageNode extends XMLNode {
       0
     );
 
-    bufferBuilder.printImage(new Image(pixels), this.attributes.density);
+    let mode;
+    switch (this.attributes.mode) {
+      case 'NORMAL':
+        mode = RASTER_MODE.NORMAL; break;
+      case 'DW':
+        mode = RASTER_MODE.DOUBLE_WIDTH; break;
+      case 'DH':
+        mode = RASTER_MODE.DOUBLE_HEIGHT; break;
+      case 'DWH':
+        mode = RASTER_MODE.DOUBLE_WIDTH_HEIGHT; break;
+      default:
+        mode = RASTER_MODE.NORMAL;
+    }
+
+    bufferBuilder.printImage(new Image(pixels), mode);
     return bufferBuilder;
   }
 

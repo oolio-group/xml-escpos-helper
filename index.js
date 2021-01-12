@@ -7803,6 +7803,232 @@ module.exports = g;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RASTER_MODE = exports.STATUS_TYPE = exports.BITMAP_SCALE = exports.QR_EC_LEVEL = exports.BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_FONT = exports.BARCODE_WIDTH = exports.BARCODE_SYSTEM = exports.ALIGNMENT = exports.UNDERLINE_MODE = exports.BufferBuilder = void 0;
+const command_1 = __webpack_require__(188);
+const mutable_buffer_1 = __webpack_require__(189);
+const image_1 = __importDefault(__webpack_require__(160));
+class BufferBuilder {
+    constructor(defaultSettings = true) {
+        this.defaultSettings = defaultSettings;
+        this.buffer = new mutable_buffer_1.MutableBuffer();
+        if (this.defaultSettings) {
+            this.resetCharacterSize();
+            this.resetCharacterCodeTable();
+        }
+    }
+    end() {
+        return this;
+    }
+    resetCharacterCodeTable() {
+        this.buffer.write(command_1.Command.ESC_t(0));
+        return this;
+    }
+    setCharacterSize(width = 0, height = 0) {
+        let size = (width << 4) + height;
+        this.buffer.write(command_1.Command.GS_exclamation(size));
+        return this;
+    }
+    resetCharacterSize() {
+        this.buffer.write(command_1.Command.GS_exclamation(0));
+        return this;
+    }
+    startCompressedCharacter() {
+        this.buffer.write(command_1.Command.ESC_M(1));
+        return this;
+    }
+    endCompressedCharacter() {
+        this.buffer.write(command_1.Command.ESC_M(0));
+        return this;
+    }
+    startBold() {
+        this.buffer.write(command_1.Command.ESC_E(1));
+        return this;
+    }
+    endBold() {
+        this.buffer.write(command_1.Command.ESC_E(0));
+        return this;
+    }
+    startUnderline(underlineMode = UNDERLINE_MODE.TWO_POINTS_OF_COARSE) {
+        this.buffer.write(command_1.Command.ESC_minus(underlineMode));
+        return this;
+    }
+    endUnderline() {
+        this.buffer.write(command_1.Command.ESC_minus(48));
+        return this;
+    }
+    startAlign(alignment) {
+        this.buffer.write(command_1.Command.ESC_a(alignment));
+        return this;
+    }
+    resetAlign() {
+        return this.startAlign(ALIGNMENT.LEFT);
+    }
+    startWhiteMode() {
+        this.buffer.write(command_1.Command.GS_B(1));
+        return this;
+    }
+    endWhiteMode() {
+        this.buffer.write(command_1.Command.GS_B(0));
+        return this;
+    }
+    startReverseMode() {
+        this.buffer.write(command_1.Command.ESC_rev(1));
+        return this;
+    }
+    endReverseMode() {
+        this.buffer.write(command_1.Command.ESC_rev(0));
+        return this;
+    }
+    printBarcode(data, barcodeSystem, width = BARCODE_WIDTH.DOT_375, height = 162, labelFont = BARCODE_LABEL_FONT.FONT_A, labelPosition = BARCODE_LABEL_POSITION.BOTTOM, leftSpacing = 0) {
+        this.buffer.write(command_1.Command.GS_w(width)); // width
+        this.buffer.write(command_1.Command.GS_h(height)); // height
+        this.buffer.write(command_1.Command.GS_x(leftSpacing)); // left spacing
+        this.buffer.write(command_1.Command.GS_f(labelFont)); // HRI font
+        this.buffer.write(command_1.Command.GS_H(labelPosition)); // HRI font
+        this.buffer.write(command_1.Command.GS_K(barcodeSystem, data.length)); // data is a string in UTF-8
+        this.buffer.write(data, "ascii");
+        return this;
+    }
+    printQRcode(data, version = 1, errorCorrectionLevel = QR_EC_LEVEL.H, componentTypes = 8) {
+        this.buffer.write(command_1.Command.ESC_Z(version, errorCorrectionLevel, componentTypes));
+        this.buffer.writeUInt16LE(data.length); // data is a string in UTF-8
+        this.buffer.write(data, "ascii");
+        return this;
+    }
+    printBitmap(image, width, height, scale = BITMAP_SCALE.NORMAL) {
+        //TODO
+        return this;
+    }
+    printText(text) {
+        this.buffer.write(text, "ascii");
+        return this;
+    }
+    printTextLine(text) {
+        return this.printText(text).breakLine();
+    }
+    breakLine(lines = 0) {
+        this.buffer.write(command_1.Command.ESC_d(lines));
+        return this;
+    }
+    lineFeed() {
+        this.buffer.write(command_1.Command.LF);
+        return this;
+    }
+    transmitStatus(statusType) {
+        this.buffer.write(command_1.Command.DLE_EOT(statusType));
+        return this;
+    }
+    build() {
+        if (this.defaultSettings) {
+            this.lineFeed();
+            this.buffer.write(command_1.Command.ESC_init);
+        }
+        return this.buffer.flush();
+    }
+    /**
+     * Register Paper Cut Action
+     * @return BufferBuilder
+     */
+    paperCut() {
+        this.buffer.write(command_1.Command.GS_v(1));
+        return this;
+    }
+    printImage(image, mode) {
+        if (!(image instanceof image_1.default)) {
+            throw new TypeError("not supported");
+        }
+        const raster = image.toRaster();
+        this.buffer.write(command_1.Command.GS_v0(mode));
+        this.buffer.writeUInt16LE(raster.width);
+        this.buffer.writeUInt16LE(raster.height);
+        this.buffer.write(raster.data);
+        return this;
+    }
+}
+exports.BufferBuilder = BufferBuilder;
+var UNDERLINE_MODE;
+(function (UNDERLINE_MODE) {
+    UNDERLINE_MODE[UNDERLINE_MODE["ONE_POINT_OF_COARSE"] = 49] = "ONE_POINT_OF_COARSE";
+    UNDERLINE_MODE[UNDERLINE_MODE["TWO_POINTS_OF_COARSE"] = 50] = "TWO_POINTS_OF_COARSE";
+})(UNDERLINE_MODE = exports.UNDERLINE_MODE || (exports.UNDERLINE_MODE = {}));
+var ALIGNMENT;
+(function (ALIGNMENT) {
+    ALIGNMENT[ALIGNMENT["LEFT"] = 48] = "LEFT";
+    ALIGNMENT[ALIGNMENT["CENTER"] = 49] = "CENTER";
+    ALIGNMENT[ALIGNMENT["RIGHT"] = 50] = "RIGHT";
+})(ALIGNMENT = exports.ALIGNMENT || (exports.ALIGNMENT = {}));
+var BARCODE_SYSTEM;
+(function (BARCODE_SYSTEM) {
+    BARCODE_SYSTEM[BARCODE_SYSTEM["UPC_A"] = 65] = "UPC_A";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["UPC_E"] = 66] = "UPC_E";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["EAN_13"] = 67] = "EAN_13";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["EAN_8"] = 68] = "EAN_8";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_39"] = 69] = "CODE_39";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["ITF"] = 70] = "ITF";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["CODABAR"] = 71] = "CODABAR";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_93"] = 72] = "CODE_93";
+    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_128"] = 73] = "CODE_128";
+})(BARCODE_SYSTEM = exports.BARCODE_SYSTEM || (exports.BARCODE_SYSTEM = {}));
+var BARCODE_WIDTH;
+(function (BARCODE_WIDTH) {
+    BARCODE_WIDTH[BARCODE_WIDTH["DOT_250"] = 2] = "DOT_250";
+    BARCODE_WIDTH[BARCODE_WIDTH["DOT_375"] = 3] = "DOT_375";
+    BARCODE_WIDTH[BARCODE_WIDTH["DOT_560"] = 4] = "DOT_560";
+    BARCODE_WIDTH[BARCODE_WIDTH["DOT_625"] = 5] = "DOT_625";
+    BARCODE_WIDTH[BARCODE_WIDTH["DOT_750"] = 6] = "DOT_750";
+})(BARCODE_WIDTH = exports.BARCODE_WIDTH || (exports.BARCODE_WIDTH = {}));
+var BARCODE_LABEL_FONT;
+(function (BARCODE_LABEL_FONT) {
+    BARCODE_LABEL_FONT[BARCODE_LABEL_FONT["FONT_A"] = 48] = "FONT_A";
+    BARCODE_LABEL_FONT[BARCODE_LABEL_FONT["FONT_B"] = 49] = "FONT_B";
+})(BARCODE_LABEL_FONT = exports.BARCODE_LABEL_FONT || (exports.BARCODE_LABEL_FONT = {}));
+var BARCODE_LABEL_POSITION;
+(function (BARCODE_LABEL_POSITION) {
+    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["NOT_PRINT"] = 48] = "NOT_PRINT";
+    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["ABOVE"] = 49] = "ABOVE";
+    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["BOTTOM"] = 50] = "BOTTOM";
+    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["ABOVE_BOTTOM"] = 51] = "ABOVE_BOTTOM";
+})(BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_POSITION || (exports.BARCODE_LABEL_POSITION = {}));
+var QR_EC_LEVEL;
+(function (QR_EC_LEVEL) {
+    QR_EC_LEVEL[QR_EC_LEVEL["L"] = 0] = "L";
+    QR_EC_LEVEL[QR_EC_LEVEL["M"] = 1] = "M";
+    QR_EC_LEVEL[QR_EC_LEVEL["Q"] = 2] = "Q";
+    QR_EC_LEVEL[QR_EC_LEVEL["H"] = 3] = "H";
+})(QR_EC_LEVEL = exports.QR_EC_LEVEL || (exports.QR_EC_LEVEL = {}));
+var BITMAP_SCALE;
+(function (BITMAP_SCALE) {
+    BITMAP_SCALE[BITMAP_SCALE["NORMAL"] = 48] = "NORMAL";
+    BITMAP_SCALE[BITMAP_SCALE["DOUBLE_WIDTH"] = 49] = "DOUBLE_WIDTH";
+    BITMAP_SCALE[BITMAP_SCALE["DOUBLE_HEIGHT"] = 50] = "DOUBLE_HEIGHT";
+    BITMAP_SCALE[BITMAP_SCALE["FOUR_TIMES"] = 51] = "FOUR_TIMES";
+})(BITMAP_SCALE = exports.BITMAP_SCALE || (exports.BITMAP_SCALE = {}));
+var STATUS_TYPE;
+(function (STATUS_TYPE) {
+    STATUS_TYPE[STATUS_TYPE["PRINTER_STATUS"] = 1] = "PRINTER_STATUS";
+    STATUS_TYPE[STATUS_TYPE["OFFLINE_STATUS"] = 2] = "OFFLINE_STATUS";
+    STATUS_TYPE[STATUS_TYPE["ERROR_STATUS"] = 3] = "ERROR_STATUS";
+    STATUS_TYPE[STATUS_TYPE["PAPER_ROLL_SENSOR_STATUS"] = 4] = "PAPER_ROLL_SENSOR_STATUS";
+})(STATUS_TYPE = exports.STATUS_TYPE || (exports.STATUS_TYPE = {}));
+var RASTER_MODE;
+(function (RASTER_MODE) {
+    RASTER_MODE[RASTER_MODE["NORMAL"] = 0] = "NORMAL";
+    RASTER_MODE[RASTER_MODE["DOUBLE_WIDTH"] = 1] = "DOUBLE_WIDTH";
+    RASTER_MODE[RASTER_MODE["DOUBLE_HEIGHT"] = 2] = "DOUBLE_HEIGHT";
+    RASTER_MODE[RASTER_MODE["DOUBLE_WIDTH_HEIGHT"] = 3] = "DOUBLE_WIDTH_HEIGHT";
+})(RASTER_MODE = exports.RASTER_MODE || (exports.RASTER_MODE = {}));
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -8510,233 +8736,6 @@ exports.callbackify = callbackify;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.STATUS_TYPE = exports.BITMAP_SCALE = exports.QR_EC_LEVEL = exports.BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_FONT = exports.BARCODE_WIDTH = exports.BARCODE_SYSTEM = exports.ALIGNMENT = exports.UNDERLINE_MODE = exports.BufferBuilder = void 0;
-const command_1 = __webpack_require__(188);
-const mutable_buffer_1 = __webpack_require__(189);
-const image_1 = __importDefault(__webpack_require__(160));
-class BufferBuilder {
-    constructor(defaultSettings = true) {
-        this.defaultSettings = defaultSettings;
-        this.buffer = new mutable_buffer_1.MutableBuffer();
-        if (this.defaultSettings) {
-            this.resetCharacterSize();
-            this.resetCharacterCodeTable();
-        }
-    }
-    end() {
-        return this;
-    }
-    resetCharacterCodeTable() {
-        this.buffer.write(command_1.Command.ESC_t(0));
-        return this;
-    }
-    setCharacterSize(width = 0, height = 0) {
-        let size = (width << 4) + height;
-        this.buffer.write(command_1.Command.GS_exclamation(size));
-        return this;
-    }
-    resetCharacterSize() {
-        this.buffer.write(command_1.Command.GS_exclamation(0));
-        return this;
-    }
-    startCompressedCharacter() {
-        this.buffer.write(command_1.Command.ESC_M(1));
-        return this;
-    }
-    endCompressedCharacter() {
-        this.buffer.write(command_1.Command.ESC_M(0));
-        return this;
-    }
-    startBold() {
-        this.buffer.write(command_1.Command.ESC_E(1));
-        return this;
-    }
-    endBold() {
-        this.buffer.write(command_1.Command.ESC_E(0));
-        return this;
-    }
-    startUnderline(underlineMode = UNDERLINE_MODE.TWO_POINTS_OF_COARSE) {
-        this.buffer.write(command_1.Command.ESC_minus(underlineMode));
-        return this;
-    }
-    endUnderline() {
-        this.buffer.write(command_1.Command.ESC_minus(48));
-        return this;
-    }
-    startAlign(alignment) {
-        this.buffer.write(command_1.Command.ESC_a(alignment));
-        return this;
-    }
-    resetAlign() {
-        return this.startAlign(ALIGNMENT.LEFT);
-    }
-    startWhiteMode() {
-        this.buffer.write(command_1.Command.GS_B(1));
-        return this;
-    }
-    endWhiteMode() {
-        this.buffer.write(command_1.Command.GS_B(0));
-        return this;
-    }
-    startReverseMode() {
-        this.buffer.write(command_1.Command.ESC_rev(1));
-        return this;
-    }
-    endReverseMode() {
-        this.buffer.write(command_1.Command.ESC_rev(0));
-        return this;
-    }
-    printBarcode(data, barcodeSystem, width = BARCODE_WIDTH.DOT_375, height = 162, labelFont = BARCODE_LABEL_FONT.FONT_A, labelPosition = BARCODE_LABEL_POSITION.BOTTOM, leftSpacing = 0) {
-        this.buffer.write(command_1.Command.GS_w(width)); // width
-        this.buffer.write(command_1.Command.GS_h(height)); // height
-        this.buffer.write(command_1.Command.GS_x(leftSpacing)); // left spacing
-        this.buffer.write(command_1.Command.GS_f(labelFont)); // HRI font
-        this.buffer.write(command_1.Command.GS_H(labelPosition)); // HRI font
-        this.buffer.write(command_1.Command.GS_K(barcodeSystem, data.length)); // data is a string in UTF-8
-        this.buffer.write(data, "ascii");
-        return this;
-    }
-    printQRcode(data, version = 1, errorCorrectionLevel = QR_EC_LEVEL.H, componentTypes = 8) {
-        this.buffer.write(command_1.Command.ESC_Z(version, errorCorrectionLevel, componentTypes));
-        this.buffer.writeUInt16LE(data.length); // data is a string in UTF-8
-        this.buffer.write(data, "ascii");
-        return this;
-    }
-    printBitmap(image, width, height, scale = BITMAP_SCALE.NORMAL) {
-        //TODO
-        return this;
-    }
-    printText(text) {
-        this.buffer.write(text, "ascii");
-        return this;
-    }
-    printTextLine(text) {
-        return this.printText(text).breakLine();
-    }
-    breakLine(lines = 0) {
-        this.buffer.write(command_1.Command.ESC_d(lines));
-        return this;
-    }
-    lineFeed() {
-        this.buffer.write(command_1.Command.LF);
-        return this;
-    }
-    transmitStatus(statusType) {
-        this.buffer.write(command_1.Command.DLE_EOT(statusType));
-        return this;
-    }
-    build() {
-        if (this.defaultSettings) {
-            this.lineFeed();
-            this.buffer.write(command_1.Command.ESC_init);
-        }
-        return this.buffer.flush();
-    }
-    /**
-     * Register Paper Cut Action
-     * @return BufferBuilder
-     */
-    paperCut() {
-        this.buffer.write(command_1.Command.GS_v(1));
-        return this;
-    }
-    printImage(image, density) {
-        if (!(image instanceof image_1.default)) {
-            throw new TypeError("not supported");
-        }
-        const mode = "normal";
-        const GSV0_FORMAT = {
-            GSV0_NORMAL: '\x1d\x76\x30\x00',
-            GSV0_DW: '\x1d\x76\x30\x01',
-            GSV0_DH: '\x1d\x76\x30\x02',
-            GSV0_DWDH: '\x1d\x76\x30\x03'
-        };
-        // if (mode === "dhdw" || mode === "dwh" || mode === "dhw") mode = "dwdh";
-        const raster = image.toRaster();
-        this.buffer.write([0x1d, 0x76, 0x30, 0x00]);
-        this.buffer.writeUInt16LE(raster.width);
-        this.buffer.writeUInt16LE(raster.height);
-        this.buffer.write(raster.data);
-        return this;
-    }
-}
-exports.BufferBuilder = BufferBuilder;
-var UNDERLINE_MODE;
-(function (UNDERLINE_MODE) {
-    UNDERLINE_MODE[UNDERLINE_MODE["ONE_POINT_OF_COARSE"] = 49] = "ONE_POINT_OF_COARSE";
-    UNDERLINE_MODE[UNDERLINE_MODE["TWO_POINTS_OF_COARSE"] = 50] = "TWO_POINTS_OF_COARSE";
-})(UNDERLINE_MODE = exports.UNDERLINE_MODE || (exports.UNDERLINE_MODE = {}));
-var ALIGNMENT;
-(function (ALIGNMENT) {
-    ALIGNMENT[ALIGNMENT["LEFT"] = 48] = "LEFT";
-    ALIGNMENT[ALIGNMENT["CENTER"] = 49] = "CENTER";
-    ALIGNMENT[ALIGNMENT["RIGHT"] = 50] = "RIGHT";
-})(ALIGNMENT = exports.ALIGNMENT || (exports.ALIGNMENT = {}));
-var BARCODE_SYSTEM;
-(function (BARCODE_SYSTEM) {
-    BARCODE_SYSTEM[BARCODE_SYSTEM["UPC_A"] = 65] = "UPC_A";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["UPC_E"] = 66] = "UPC_E";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["EAN_13"] = 67] = "EAN_13";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["EAN_8"] = 68] = "EAN_8";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_39"] = 69] = "CODE_39";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["ITF"] = 70] = "ITF";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["CODABAR"] = 71] = "CODABAR";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_93"] = 72] = "CODE_93";
-    BARCODE_SYSTEM[BARCODE_SYSTEM["CODE_128"] = 73] = "CODE_128";
-})(BARCODE_SYSTEM = exports.BARCODE_SYSTEM || (exports.BARCODE_SYSTEM = {}));
-var BARCODE_WIDTH;
-(function (BARCODE_WIDTH) {
-    BARCODE_WIDTH[BARCODE_WIDTH["DOT_250"] = 2] = "DOT_250";
-    BARCODE_WIDTH[BARCODE_WIDTH["DOT_375"] = 3] = "DOT_375";
-    BARCODE_WIDTH[BARCODE_WIDTH["DOT_560"] = 4] = "DOT_560";
-    BARCODE_WIDTH[BARCODE_WIDTH["DOT_625"] = 5] = "DOT_625";
-    BARCODE_WIDTH[BARCODE_WIDTH["DOT_750"] = 6] = "DOT_750";
-})(BARCODE_WIDTH = exports.BARCODE_WIDTH || (exports.BARCODE_WIDTH = {}));
-var BARCODE_LABEL_FONT;
-(function (BARCODE_LABEL_FONT) {
-    BARCODE_LABEL_FONT[BARCODE_LABEL_FONT["FONT_A"] = 48] = "FONT_A";
-    BARCODE_LABEL_FONT[BARCODE_LABEL_FONT["FONT_B"] = 49] = "FONT_B";
-})(BARCODE_LABEL_FONT = exports.BARCODE_LABEL_FONT || (exports.BARCODE_LABEL_FONT = {}));
-var BARCODE_LABEL_POSITION;
-(function (BARCODE_LABEL_POSITION) {
-    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["NOT_PRINT"] = 48] = "NOT_PRINT";
-    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["ABOVE"] = 49] = "ABOVE";
-    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["BOTTOM"] = 50] = "BOTTOM";
-    BARCODE_LABEL_POSITION[BARCODE_LABEL_POSITION["ABOVE_BOTTOM"] = 51] = "ABOVE_BOTTOM";
-})(BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_POSITION || (exports.BARCODE_LABEL_POSITION = {}));
-var QR_EC_LEVEL;
-(function (QR_EC_LEVEL) {
-    QR_EC_LEVEL[QR_EC_LEVEL["L"] = 0] = "L";
-    QR_EC_LEVEL[QR_EC_LEVEL["M"] = 1] = "M";
-    QR_EC_LEVEL[QR_EC_LEVEL["Q"] = 2] = "Q";
-    QR_EC_LEVEL[QR_EC_LEVEL["H"] = 3] = "H";
-})(QR_EC_LEVEL = exports.QR_EC_LEVEL || (exports.QR_EC_LEVEL = {}));
-var BITMAP_SCALE;
-(function (BITMAP_SCALE) {
-    BITMAP_SCALE[BITMAP_SCALE["NORMAL"] = 48] = "NORMAL";
-    BITMAP_SCALE[BITMAP_SCALE["DOUBLE_WIDTH"] = 49] = "DOUBLE_WIDTH";
-    BITMAP_SCALE[BITMAP_SCALE["DOUBLE_HEIGHT"] = 50] = "DOUBLE_HEIGHT";
-    BITMAP_SCALE[BITMAP_SCALE["FOUR_TIMES"] = 51] = "FOUR_TIMES";
-})(BITMAP_SCALE = exports.BITMAP_SCALE || (exports.BITMAP_SCALE = {}));
-var STATUS_TYPE;
-(function (STATUS_TYPE) {
-    STATUS_TYPE[STATUS_TYPE["PRINTER_STATUS"] = 1] = "PRINTER_STATUS";
-    STATUS_TYPE[STATUS_TYPE["OFFLINE_STATUS"] = 2] = "OFFLINE_STATUS";
-    STATUS_TYPE[STATUS_TYPE["ERROR_STATUS"] = 3] = "ERROR_STATUS";
-    STATUS_TYPE[STATUS_TYPE["PAPER_ROLL_SENSOR_STATUS"] = 4] = "PAPER_ROLL_SENSOR_STATUS";
-})(STATUS_TYPE = exports.STATUS_TYPE || (exports.STATUS_TYPE = {}));
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9030,7 +9029,7 @@ function objectToString(o) {
 var Buffer = __webpack_require__(1).Buffer;
 var Transform = __webpack_require__(12).Transform;
 var binding = __webpack_require__(226);
-var util = __webpack_require__(5);
+var util = __webpack_require__(6);
 var assert = __webpack_require__(20).ok;
 var kMaxLength = __webpack_require__(1).kMaxLength;
 var kRangeErrorMessage = 'Cannot create final Buffer. It would be larger ' + 'than 0x' + kMaxLength.toString(16) + ' bytes';
@@ -9985,7 +9984,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.XMLParser = void 0;
 const xml_parser_1 = __importDefault(__webpack_require__(184));
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 const node_factory_1 = __webpack_require__(193);
 class XMLParser {
     parser(xml) {
@@ -11347,7 +11346,7 @@ function isBuffer(b) {
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var util = __webpack_require__(5);
+var util = __webpack_require__(6);
 var hasOwn = Object.prototype.hasOwnProperty;
 var pSlice = Array.prototype.slice;
 var functionsHaveNames = (function () {
@@ -29891,7 +29890,7 @@ module.exports = crc32;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process, Buffer) {
 
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 let Stream = __webpack_require__(12);
 
 let ChunkStream = (module.exports = function () {
@@ -31320,7 +31319,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(__webpack_require__(21), exports);
 __exportStar(__webpack_require__(15), exports);
-__exportStar(__webpack_require__(6), exports);
+__exportStar(__webpack_require__(5), exports);
 __exportStar(__webpack_require__(245), exports);
 
 
@@ -55388,7 +55387,7 @@ exports.NodeFactory = NodeFactory;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 class AlignNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55423,7 +55422,7 @@ exports.default = AlignNode;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 class BarcodeNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55632,7 +55631,7 @@ exports.default = LineFeedNode;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 class QRcodeNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55738,7 +55737,7 @@ exports.default = TextLineNode;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 class UnderlineNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55821,6 +55820,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
+const buffer_builder_1 = __webpack_require__(5);
 const ndarray_1 = __importDefault(__webpack_require__(207));
 const image_1 = __importDefault(__webpack_require__(160));
 const pngjs_1 = __importDefault(__webpack_require__(210));
@@ -55832,7 +55832,24 @@ class ImageNode extends xml_node_1.XMLNode {
     open(bufferBuilder) {
         const img_data = PNG.sync.read(Buffer.from(this.content.slice("data:image/png;base64,".length), "base64"));
         const pixels = ndarray_1.default(new Uint8Array(img_data.data), [img_data.width | 0, img_data.height | 0, 4], [4, (4 * img_data.width) | 0, 1], 0);
-        bufferBuilder.printImage(new image_1.default(pixels), this.attributes.density);
+        let mode;
+        switch (this.attributes.mode) {
+            case 'NORMAL':
+                mode = buffer_builder_1.RASTER_MODE.NORMAL;
+                break;
+            case 'DW':
+                mode = buffer_builder_1.RASTER_MODE.DOUBLE_WIDTH;
+                break;
+            case 'DH':
+                mode = buffer_builder_1.RASTER_MODE.DOUBLE_HEIGHT;
+                break;
+            case 'DWH':
+                mode = buffer_builder_1.RASTER_MODE.DOUBLE_WIDTH_HEIGHT;
+                break;
+            default:
+                mode = buffer_builder_1.RASTER_MODE.NORMAL;
+        }
+        bufferBuilder.printImage(new image_1.default(pixels), mode);
         return bufferBuilder;
     }
     close(bufferBuilder) {
@@ -56249,7 +56266,7 @@ function isSlowBuffer (obj) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer, process) {
 
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 let Stream = __webpack_require__(12);
 let Parser = __webpack_require__(225);
 let Packer = __webpack_require__(237);
@@ -57077,7 +57094,7 @@ module.exports = __webpack_require__(17).PassThrough
 "use strict";
 
 
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 let zlib = __webpack_require__(10);
 let ChunkStream = __webpack_require__(169);
 let FilterAsync = __webpack_require__(236);
@@ -63309,7 +63326,7 @@ module.exports = {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 let ChunkStream = __webpack_require__(169);
 let Filter = __webpack_require__(170);
 
@@ -63341,7 +63358,7 @@ util.inherits(FilterAsync, ChunkStream);
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 let Stream = __webpack_require__(12);
 let constants = __webpack_require__(11);
 let Packer = __webpack_require__(177);
@@ -63885,7 +63902,7 @@ module.exports = function (buffer, options) {
 
 let assert = __webpack_require__(20).ok;
 let zlib = __webpack_require__(10);
-let util = __webpack_require__(5);
+let util = __webpack_require__(6);
 
 let kMaxLength = __webpack_require__(1).kMaxLength;
 
@@ -64155,7 +64172,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EscPos = void 0;
 const template_parser_1 = __webpack_require__(21);
 const xml_parser_1 = __webpack_require__(15);
-const buffer_builder_1 = __webpack_require__(6);
+const buffer_builder_1 = __webpack_require__(5);
 class EscPos {
     static getBufferFromTemplate(template, data) {
         let templateParser = new template_parser_1.TemplateParser();

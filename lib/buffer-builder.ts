@@ -182,20 +182,12 @@ export class BufferBuilder {
     return this;
   }
 
-  public printImage(image, density): BufferBuilder {
+  public printImage(image: Image, mode: RASTER_MODE): BufferBuilder {
     if (!(image instanceof Image)) {
       throw new TypeError("not supported");
     }
-    const mode = "normal";
-    const GSV0_FORMAT = {
-      GSV0_NORMAL: '\x1d\x76\x30\x00',
-      GSV0_DW: '\x1d\x76\x30\x01',
-      GSV0_DH: '\x1d\x76\x30\x02',
-      GSV0_DWDH: '\x1d\x76\x30\x03'
-    };
-    // if (mode === "dhdw" || mode === "dwh" || mode === "dhw") mode = "dwdh";
     const raster = image.toRaster();
-    this.buffer.write([0x1d, 0x76, 0x30, 0x00]);
+    this.buffer.write(Command.GS_v0(mode));
     this.buffer.writeUInt16LE(raster.width);
     this.buffer.writeUInt16LE(raster.height);
     this.buffer.write(raster.data);
@@ -265,4 +257,11 @@ export enum STATUS_TYPE {
   OFFLINE_STATUS = 2,
   ERROR_STATUS = 3,
   PAPER_ROLL_SENSOR_STATUS = 4,
+}
+
+export enum RASTER_MODE {
+  NORMAL = 0,
+  DOUBLE_WIDTH = 1,
+  DOUBLE_HEIGHT = 2,
+  DOUBLE_WIDTH_HEIGHT = 3,
 }
