@@ -207,7 +207,6 @@ export class BufferBuilder {
         bitmapFormat = "\x1b\x2a\x21";
     }
 
-    console.log("iiin uffer builder");
 
     this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
     this.buffer.write(Command.GS_h(162)); // height
@@ -243,7 +242,10 @@ export class BufferBuilder {
     //   // });
     // });
     // // this.buffer.write(data, "ascii");
-    // this.paperCut()
+    this.paperCut()
+
+        console.log("iiin uffer builder");
+
     return this;
   }
 }

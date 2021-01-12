@@ -6056,7 +6056,6 @@ class BufferBuilder {
                 console.warn("no bitmap format specified, using default d24");
                 bitmapFormat = "\x1b\x2a\x21";
         }
-        console.log("iiin uffer builder");
         this.buffer.write(command_1.Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
         this.buffer.write(command_1.Command.GS_h(162)); // height
         this.buffer.write(command_1.Command.GS_x(0)); // left spacing
@@ -6088,7 +6087,8 @@ class BufferBuilder {
         //   // });
         // });
         // // this.buffer.write(data, "ascii");
-        // this.paperCut()
+        this.paperCut();
+        console.log("iiin uffer builder");
         return this;
     }
 }
