@@ -187,8 +187,8 @@ export class BufferBuilder {
     return this;
   }
 
-  // public startPImage(image, density): BufferBuilder {
-    public startPImage(): BufferBuilder {
+  public startPImage(image, density): BufferBuilder {
+    // public startPImage(): BufferBuilder {
 
     // density = density || 'd24';
     //         let bitmapFormat;
@@ -209,6 +209,8 @@ export class BufferBuilder {
     //             console.warn('no bitmap format specified, using default');
     //             bitmapFormat = '\x1b\x2a\x00';
     //         }
+
+    console.log('iiin uffer builder')
 
             this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
             this.buffer.write(Command.GS_h(162)); // height
