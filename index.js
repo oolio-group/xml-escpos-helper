@@ -8673,6 +8673,13 @@ class BufferBuilder {
                 console.warn('no bitmap format specified, using default');
                 bitmapFormat = '\x1b\x2a\x00';
         }
+        this.buffer.write(command_1.Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
+        this.buffer.write(command_1.Command.GS_h(162)); // height
+        this.buffer.write(command_1.Command.GS_x(0)); // left spacing
+        this.buffer.write(command_1.Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
+        this.buffer.write(command_1.Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
+        this.buffer.write(command_1.Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
+        this.buffer.write("123456", "ascii");
         const EOL = "\n";
         // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, '12345678'.length)); // data is a string in UTF-8
         // this.buffer.write('12345678', "ascii");
