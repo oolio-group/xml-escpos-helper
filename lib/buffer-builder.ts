@@ -211,34 +211,34 @@ export class BufferBuilder {
 
     const EOL = "\n";
 
-    this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, '12345678'.length)); // data is a string in UTF-8
-    this.buffer.write('12345678', "ascii");
-    // // const imagePx = new PImage(image)
-    // if (!(image instanceof PImage)) {
-    //   throw new TypeError("Only escpos.PImage supported");
-    // }
-    // density = density || "d24";
-    // var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
+    // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, '12345678'.length)); // data is a string in UTF-8
+    // this.buffer.write('12345678', "ascii");
+    // const imagePx = new PImage(image)
+    if (!(image instanceof PImage)) {
+      throw new TypeError("Only escpos.PImage supported");
+    }
+    density = density || "d24";
+    var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
     // var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-    // var bitmap = image.toBitmap(n * 8);
+    var bitmap = image.toBitmap(n * 8);
 
-    // // added a delay so the printer can process the graphical data
-    // // when connected via slower connection ( e.g.: Serial)
-    // this.breakLine(0); // set line spacing to 0
-    // // this.buffer.write(Command.ESC_akp());
-    // bitmap.data.forEach( (line) => {
-    //   this.buffer.write(header);
-    //   this.buffer.writeUInt16LE(line.length / n);
-    //   this.buffer.write(line);
-    //   this.buffer.write(EOL);
-    //   // await new Promise((resolve, reject) => {
-    //   //   setTimeout(() => {
-    //   //     resolve(true);
-    //   //   }, 200);
-    //   // });
-    // });
-    // // this.buffer.write(data, "ascii");
-    // this.paperCut()
+    // added a delay so the printer can process the graphical data
+    // when connected via slower connection ( e.g.: Serial)
+    this.breakLine(0); // set line spacing to 0
+    // this.buffer.write(Command.ESC_akp());
+    bitmap.data.forEach( (line) => {
+      this.buffer.write(bitmapFormat);
+      this.buffer.writeUInt16LE(line.length / n);
+      this.buffer.write(line);
+      this.buffer.write(EOL);
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(true);
+      //   }, 200);
+      // });
+    });
+    // this.buffer.write(data, "ascii");
+    this.paperCut()
     return this;
   }
 }

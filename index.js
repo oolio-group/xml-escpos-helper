@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 178);
+/******/ 	return __webpack_require__(__webpack_require__.s = 179);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2168,7 +2168,7 @@ return /******/ (function(modules) { // webpackBootstrap
             try {
                 oldLocale = globalLocale._abbr;
                 aliasedRequire = require;
-                __webpack_require__(180)("./" + name);
+                __webpack_require__(181)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {
                 // mark as not found to avoid repeating expensive file require call causing high CPU
@@ -5765,8 +5765,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-var base64 = __webpack_require__(190)
-var ieee754 = __webpack_require__(191)
+var base64 = __webpack_require__(191)
+var ieee754 = __webpack_require__(192)
 var isArray = __webpack_require__(159)
 
 exports.Buffer = Buffer
@@ -8515,10 +8515,14 @@ exports.callbackify = callbackify;
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.STATUS_TYPE = exports.BITMAP_SCALE = exports.QR_EC_LEVEL = exports.BARCODE_LABEL_POSITION = exports.BARCODE_LABEL_FONT = exports.BARCODE_WIDTH = exports.BARCODE_SYSTEM = exports.ALIGNMENT = exports.UNDERLINE_MODE = exports.BufferBuilder = void 0;
-const command_1 = __webpack_require__(187);
-const mutable_buffer_1 = __webpack_require__(188);
+const command_1 = __webpack_require__(188);
+const mutable_buffer_1 = __webpack_require__(189);
+const pimage_1 = __importDefault(__webpack_require__(160));
 class BufferBuilder {
     constructor(defaultSettings = true) {
         this.defaultSettings = defaultSettings;
@@ -8670,33 +8674,33 @@ class BufferBuilder {
                 bitmapFormat = '\x1b\x2a\x00';
         }
         const EOL = "\n";
-        this.buffer.write(command_1.Command.GS_K(BARCODE_SYSTEM.UPC_A, '12345678'.length)); // data is a string in UTF-8
-        this.buffer.write('12345678', "ascii");
-        // // const imagePx = new PImage(image)
-        // if (!(image instanceof PImage)) {
-        //   throw new TypeError("Only escpos.PImage supported");
-        // }
-        // density = density || "d24";
-        // var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
+        // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, '12345678'.length)); // data is a string in UTF-8
+        // this.buffer.write('12345678', "ascii");
+        // const imagePx = new PImage(image)
+        if (!(image instanceof pimage_1.default)) {
+            throw new TypeError("Only escpos.PImage supported");
+        }
+        density = density || "d24";
+        var n = !!~["d8", "s8"].indexOf(density) ? 1 : 3;
         // var header = BITMAP_FORMAT["BITMAP_" + density.toUpperCase()];
-        // var bitmap = image.toBitmap(n * 8);
-        // // added a delay so the printer can process the graphical data
-        // // when connected via slower connection ( e.g.: Serial)
-        // this.breakLine(0); // set line spacing to 0
-        // // this.buffer.write(Command.ESC_akp());
-        // bitmap.data.forEach( (line) => {
-        //   this.buffer.write(header);
-        //   this.buffer.writeUInt16LE(line.length / n);
-        //   this.buffer.write(line);
-        //   this.buffer.write(EOL);
-        //   // await new Promise((resolve, reject) => {
-        //   //   setTimeout(() => {
-        //   //     resolve(true);
-        //   //   }, 200);
-        //   // });
-        // });
-        // // this.buffer.write(data, "ascii");
-        // this.paperCut()
+        var bitmap = image.toBitmap(n * 8);
+        // added a delay so the printer can process the graphical data
+        // when connected via slower connection ( e.g.: Serial)
+        this.breakLine(0); // set line spacing to 0
+        // this.buffer.write(Command.ESC_akp());
+        bitmap.data.forEach((line) => {
+            this.buffer.write(bitmapFormat);
+            this.buffer.writeUInt16LE(line.length / n);
+            this.buffer.write(line);
+            this.buffer.write(EOL);
+            // await new Promise((resolve, reject) => {
+            //   setTimeout(() => {
+            //     resolve(true);
+            //   }, 200);
+            // });
+        });
+        // this.buffer.write(data, "ascii");
+        this.paperCut();
         return this;
     }
 }
@@ -8821,7 +8825,7 @@ var util = Object.create(__webpack_require__(9));
 util.inherits = __webpack_require__(8);
 /*</replacement>*/
 
-var Readable = __webpack_require__(161);
+var Readable = __webpack_require__(162);
 var Writable = __webpack_require__(19);
 
 util.inherits(Duplex, Readable);
@@ -10015,9 +10019,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.XMLParser = void 0;
-const xml_parser_1 = __importDefault(__webpack_require__(183));
+const xml_parser_1 = __importDefault(__webpack_require__(184));
 const buffer_builder_1 = __webpack_require__(6);
-const node_factory_1 = __webpack_require__(192);
+const node_factory_1 = __webpack_require__(193);
 class XMLParser {
     parser(xml) {
         let parsedXML = xml_parser_1.default(xml);
@@ -10530,12 +10534,12 @@ function once(emitter, name) {
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(161);
+exports = module.exports = __webpack_require__(162);
 exports.Stream = exports;
 exports.Readable = exports;
 exports.Writable = __webpack_require__(19);
 exports.Duplex = __webpack_require__(7);
-exports.Transform = __webpack_require__(165);
+exports.Transform = __webpack_require__(166);
 exports.PassThrough = __webpack_require__(222);
 
 
@@ -10689,7 +10693,7 @@ var internalUtil = {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(162);
+var Stream = __webpack_require__(163);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -10705,7 +10709,7 @@ function _isUint8Array(obj) {
 
 /*</replacement>*/
 
-var destroyImpl = __webpack_require__(163);
+var destroyImpl = __webpack_require__(164);
 
 util.inherits(Writable, Stream);
 
@@ -11842,11 +11846,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TemplateParser = void 0;
-const handlebars = __importStar(__webpack_require__(179));
+const handlebars = __importStar(__webpack_require__(180));
 const moment = __importStar(__webpack_require__(0));
 const numeral = __importStar(__webpack_require__(158));
-__webpack_require__(181);
-const lodash_1 = __webpack_require__(182);
+__webpack_require__(182);
+const lodash_1 = __webpack_require__(183);
 const xml_parser_1 = __webpack_require__(15);
 class TemplateParser {
     constructor() {
@@ -28029,6 +28033,122 @@ module.exports = Array.isArray || function (arr) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+class PImage {
+    constructor(pixels) {
+        this.pixels = pixels;
+        this.data = [];
+        function rgb(pixel) {
+            return {
+                r: pixel[0],
+                g: pixel[1],
+                b: pixel[2],
+                a: pixel[3],
+            };
+        }
+        var self = this;
+        for (var i = 0; i < this.pixels.data.length; i += this.size.colors) {
+            this.data.push(rgb(new Array(this.size.colors).fill(0).map(function (_, b) {
+                return self.pixels.data[i + b];
+            })));
+        }
+        this.data = this.data.map(function (pixel) {
+            if (pixel.a == 0)
+                return 0;
+            var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
+            return shouldBeWhite ? 0 : 1;
+        });
+    }
+    /**
+     * [description]
+     * @return {[type]}     [description]
+     */
+    get size() {
+        return {
+            width: this.pixels.shape[0],
+            height: this.pixels.shape[1],
+            colors: this.pixels.shape[2],
+        };
+    }
+    /**
+     * [toBitmap description]
+     * @param  {[type]} density [description]
+     * @return {[type]}         [description]
+     */
+    toBitmap(density) {
+        density = density || 24;
+        var ld, result = [];
+        var x, y, b, l, i;
+        var c = density / 8;
+        // n blocks of lines
+        var n = Math.ceil(this.size.height / density);
+        for (y = 0; y < n; y++) {
+            // line data
+            ld = result[y] = [];
+            for (x = 0; x < this.size.width; x++) {
+                for (b = 0; b < density; b++) {
+                    i = x * c + (b >> 3);
+                    if (ld[i] === undefined) {
+                        ld[i] = 0;
+                    }
+                    l = y * density + b;
+                    if (l < this.size.height) {
+                        if (this.data[l * this.size.width + x]) {
+                            ld[i] += 0x80 >> (b & 0x7);
+                        }
+                    }
+                }
+            }
+        }
+        return {
+            data: result,
+            density: density,
+        };
+    }
+    /**
+     * [toRaster description]
+     * @return {[type]} [description]
+     */
+    toRaster() {
+        var result = [];
+        var width = this.size.width;
+        var height = this.size.height;
+        var data = this.data;
+        // n blocks of lines
+        var n = Math.ceil(width / 8);
+        var x, y, b, c, i;
+        for (y = 0; y < height; y++) {
+            for (x = 0; x < n; x++) {
+                for (b = 0; b < 8; b++) {
+                    i = x * 8 + b;
+                    if (result[y * n + x] === undefined) {
+                        result[y * n + x] = 0;
+                    }
+                    c = x * 8 + b;
+                    if (c < width) {
+                        if (data[y * width + i]) {
+                            result[y * n + x] += 0x80 >> (b & 0x7);
+                        }
+                    }
+                }
+            }
+        }
+        return {
+            data: result,
+            width: n,
+            height: height,
+        };
+    }
+}
+exports.default = PImage;
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
 class TextNode extends xml_node_1.XMLNode {
     constructor(node) {
@@ -28052,7 +28172,7 @@ exports.default = TextNode;
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28105,7 +28225,7 @@ var EElistenerCount = function (emitter, type) {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(162);
+var Stream = __webpack_require__(163);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -28137,7 +28257,7 @@ if (debugUtil && debugUtil.debuglog) {
 /*</replacement>*/
 
 var BufferList = __webpack_require__(216);
-var destroyImpl = __webpack_require__(163);
+var destroyImpl = __webpack_require__(164);
 var StringDecoder;
 
 util.inherits(Readable, Stream);
@@ -28227,7 +28347,7 @@ function ReadableState(options, stream) {
   this.decoder = null;
   this.encoding = null;
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __webpack_require__(164).StringDecoder;
+    if (!StringDecoder) StringDecoder = __webpack_require__(165).StringDecoder;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
@@ -28383,7 +28503,7 @@ Readable.prototype.isPaused = function () {
 
 // backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __webpack_require__(164).StringDecoder;
+  if (!StringDecoder) StringDecoder = __webpack_require__(165).StringDecoder;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -29078,14 +29198,14 @@ function indexOf(xs, x) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(3)))
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(16).EventEmitter;
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29165,7 +29285,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29467,7 +29587,7 @@ function simpleEnd(buf) {
 }
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29687,7 +29807,7 @@ function done(stream, er, data) {
 }
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29745,7 +29865,7 @@ module.exports = adler32;
 
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29811,7 +29931,7 @@ module.exports = crc32;
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30008,14 +30128,14 @@ ChunkStream.prototype._process = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let interlaceUtils = __webpack_require__(170);
-let paethPredictor = __webpack_require__(171);
+let interlaceUtils = __webpack_require__(171);
+let paethPredictor = __webpack_require__(172);
 
 function getByteWidth(width, bpp, depth) {
   let byteWidth = width * bpp;
@@ -30193,7 +30313,7 @@ Filter.prototype._reverseFilterLine = function (rawData) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30295,7 +30415,7 @@ exports.getInterlaceIterator = function (width) {
 
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30318,14 +30438,14 @@ module.exports = function paethPredictor(left, above, upLeft) {
 
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
 let constants = __webpack_require__(11);
-let CrcCalculator = __webpack_require__(173);
+let CrcCalculator = __webpack_require__(174);
 
 let Parser = (module.exports = function (options, dependencies) {
   this._options = options;
@@ -30616,7 +30736,7 @@ Parser.prototype._parseIEND = function (data) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30663,13 +30783,13 @@ CrcCalculator.crc32 = function (buf) {
 
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let interlaceUtils = __webpack_require__(170);
+let interlaceUtils = __webpack_require__(171);
 
 let pixelBppMapper = [
   // 0 - dummy entry
@@ -30938,7 +31058,7 @@ exports.dataToBitMap = function (data, bitmapInfo) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31039,14 +31159,14 @@ module.exports = function (indata, imageData, skipRescale = false) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
 let constants = __webpack_require__(11);
-let CrcStream = __webpack_require__(173);
+let CrcStream = __webpack_require__(174);
 let bitPacker = __webpack_require__(240);
 let filter = __webpack_require__(241);
 let zlib = __webpack_require__(10);
@@ -31176,7 +31296,7 @@ Packer.prototype.packIEND = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31228,7 +31348,7 @@ SyncReader.prototype.process = function () {
 
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31251,7 +31371,7 @@ __exportStar(__webpack_require__(247), exports);
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**!
@@ -36466,7 +36586,7 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -36755,10 +36875,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 180;
+webpackContext.id = 181;
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// numeral.js locale configuration
@@ -36799,7 +36919,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 182 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -53968,7 +54088,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(22)(module)))
 
 /***/ }),
-/* 183 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -53976,7 +54096,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  * Module dependencies.
  */
 
-var debug = __webpack_require__(184)('xml-parser');
+var debug = __webpack_require__(185)('xml-parser');
 
 /**
  * Expose `parse`.
@@ -54141,7 +54261,7 @@ function parse(xml) {
 
 
 /***/ }),
-/* 184 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -54150,7 +54270,7 @@ function parse(xml) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(185);
+exports = module.exports = __webpack_require__(186);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -54333,7 +54453,7 @@ function localstorage() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 185 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -54349,7 +54469,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(186);
+exports.humanize = __webpack_require__(187);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -54541,7 +54661,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 186 */
+/* 187 */
 /***/ (function(module, exports) {
 
 /**
@@ -54699,7 +54819,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 187 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54749,20 +54869,20 @@ Command.LF = [Command.NL];
 
 
 /***/ }),
-/* 188 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var MutableBuffer = __webpack_require__(189);
+var MutableBuffer = __webpack_require__(190);
 
 module.exports = exports = MutableBuffer;
 exports.MutableBuffer = MutableBuffer;
 
 
 /***/ }),
-/* 189 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55010,7 +55130,7 @@ MutableBuffer.prototype.writeDoubleBE = function writeDoubleBE(value, noAssert) 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 190 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55167,7 +55287,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 191 */
+/* 192 */
 /***/ (function(module, exports) {
 
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
@@ -55258,7 +55378,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 192 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55268,20 +55388,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NodeFactory = void 0;
-const align_node_1 = __importDefault(__webpack_require__(193));
-const barcode_node_1 = __importDefault(__webpack_require__(194));
-const bold_node_1 = __importDefault(__webpack_require__(195));
-const break_line_node_1 = __importDefault(__webpack_require__(196));
-const document_node_1 = __importDefault(__webpack_require__(197));
-const line_feed_node_1 = __importDefault(__webpack_require__(198));
-const qrcode_node_1 = __importDefault(__webpack_require__(199));
-const small_node_1 = __importDefault(__webpack_require__(200));
-const text_node_1 = __importDefault(__webpack_require__(160));
-const text_line_node_1 = __importDefault(__webpack_require__(201));
-const underline_node_1 = __importDefault(__webpack_require__(202));
-const white_mode_node_1 = __importDefault(__webpack_require__(203));
-const paper_cut_node_1 = __importDefault(__webpack_require__(204));
-const pimage_node_1 = __importDefault(__webpack_require__(205));
+const align_node_1 = __importDefault(__webpack_require__(194));
+const barcode_node_1 = __importDefault(__webpack_require__(195));
+const bold_node_1 = __importDefault(__webpack_require__(196));
+const break_line_node_1 = __importDefault(__webpack_require__(197));
+const document_node_1 = __importDefault(__webpack_require__(198));
+const line_feed_node_1 = __importDefault(__webpack_require__(199));
+const qrcode_node_1 = __importDefault(__webpack_require__(200));
+const small_node_1 = __importDefault(__webpack_require__(201));
+const text_node_1 = __importDefault(__webpack_require__(161));
+const text_line_node_1 = __importDefault(__webpack_require__(202));
+const underline_node_1 = __importDefault(__webpack_require__(203));
+const white_mode_node_1 = __importDefault(__webpack_require__(204));
+const paper_cut_node_1 = __importDefault(__webpack_require__(205));
+const pimage_node_1 = __importDefault(__webpack_require__(206));
 class NodeFactory {
     static create(nodeType, node) {
         switch (nodeType) {
@@ -55307,7 +55427,7 @@ exports.NodeFactory = NodeFactory;
 
 
 /***/ }),
-/* 193 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55342,7 +55462,7 @@ exports.default = AlignNode;
 
 
 /***/ }),
-/* 194 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55455,7 +55575,7 @@ exports.default = BarcodeNode;
 
 
 /***/ }),
-/* 195 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55479,7 +55599,7 @@ exports.default = BoldNode;
 
 
 /***/ }),
-/* 196 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55504,7 +55624,7 @@ exports.default = BreakLineNode;
 
 
 /***/ }),
-/* 197 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55529,7 +55649,7 @@ exports.default = DocumentNode;
 
 
 /***/ }),
-/* 198 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55551,7 +55671,7 @@ exports.default = LineFeedNode;
 
 
 /***/ }),
-/* 199 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55606,7 +55726,7 @@ exports.default = QRcodeNode;
 
 
 /***/ }),
-/* 200 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55630,7 +55750,7 @@ exports.default = SmallNode;
 
 
 /***/ }),
-/* 201 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55640,7 +55760,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const text_node_1 = __importDefault(__webpack_require__(160));
+const text_node_1 = __importDefault(__webpack_require__(161));
 class TextLineNode extends xml_node_1.XMLNode {
     constructor(node) {
         super(node);
@@ -55657,7 +55777,7 @@ exports.default = TextLineNode;
 
 
 /***/ }),
-/* 202 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55691,7 +55811,7 @@ exports.default = UnderlineNode;
 
 
 /***/ }),
-/* 203 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55715,7 +55835,7 @@ exports.default = WhiteModeNode;
 
 
 /***/ }),
-/* 204 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55737,7 +55857,7 @@ exports.default = PaperCutNode;
 
 
 /***/ }),
-/* 205 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55756,9 +55876,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xml_node_1 = __webpack_require__(2);
-const parse_data_uri_1 = __importDefault(__webpack_require__(206));
-const ndarray_1 = __importDefault(__webpack_require__(208));
-const pimage_1 = __importDefault(__webpack_require__(211));
+const parse_data_uri_1 = __importDefault(__webpack_require__(207));
+const ndarray_1 = __importDefault(__webpack_require__(209));
+const pimage_1 = __importDefault(__webpack_require__(160));
 // import util from 'util';
 // import Jimp from  'jimp';
 // import ndarray from 'ndarray';
@@ -55794,10 +55914,10 @@ exports.default = PImageNode;
 
 
 /***/ }),
-/* 206 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toBuffer = __webpack_require__(207)
+var toBuffer = __webpack_require__(208)
 
 function parseDataUri (dataUri) {
 
@@ -55825,7 +55945,7 @@ function normalizeMimeType(mime) {
 module.exports = parseDataUri
 
 /***/ }),
-/* 207 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {
@@ -55886,11 +56006,11 @@ function dataUriToBuffer (uri) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1).Buffer))
 
 /***/ }),
-/* 208 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var iota = __webpack_require__(209)
-var isBuffer = __webpack_require__(210)
+var iota = __webpack_require__(210)
+var isBuffer = __webpack_require__(211)
 
 var hasTypedArrays  = ((typeof Float64Array) !== "undefined")
 
@@ -56241,7 +56361,7 @@ module.exports = wrappedNDArrayCtor
 
 
 /***/ }),
-/* 209 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56258,7 +56378,7 @@ function iota(n) {
 module.exports = iota
 
 /***/ }),
-/* 210 */
+/* 211 */
 /***/ (function(module, exports) {
 
 /*!
@@ -56282,122 +56402,6 @@ function isBuffer (obj) {
 function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
-
-
-/***/ }),
-/* 211 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class PImage {
-    constructor(pixels) {
-        this.pixels = pixels;
-        this.data = [];
-        function rgb(pixel) {
-            return {
-                r: pixel[0],
-                g: pixel[1],
-                b: pixel[2],
-                a: pixel[3],
-            };
-        }
-        var self = this;
-        for (var i = 0; i < this.pixels.data.length; i += this.size.colors) {
-            this.data.push(rgb(new Array(this.size.colors).fill(0).map(function (_, b) {
-                return self.pixels.data[i + b];
-            })));
-        }
-        this.data = this.data.map(function (pixel) {
-            if (pixel.a == 0)
-                return 0;
-            var shouldBeWhite = pixel.r > 200 && pixel.g > 200 && pixel.b > 200;
-            return shouldBeWhite ? 0 : 1;
-        });
-    }
-    /**
-     * [description]
-     * @return {[type]}     [description]
-     */
-    get size() {
-        return {
-            width: this.pixels.shape[0],
-            height: this.pixels.shape[1],
-            colors: this.pixels.shape[2],
-        };
-    }
-    /**
-     * [toBitmap description]
-     * @param  {[type]} density [description]
-     * @return {[type]}         [description]
-     */
-    toBitmap(density) {
-        density = density || 24;
-        var ld, result = [];
-        var x, y, b, l, i;
-        var c = density / 8;
-        // n blocks of lines
-        var n = Math.ceil(this.size.height / density);
-        for (y = 0; y < n; y++) {
-            // line data
-            ld = result[y] = [];
-            for (x = 0; x < this.size.width; x++) {
-                for (b = 0; b < density; b++) {
-                    i = x * c + (b >> 3);
-                    if (ld[i] === undefined) {
-                        ld[i] = 0;
-                    }
-                    l = y * density + b;
-                    if (l < this.size.height) {
-                        if (this.data[l * this.size.width + x]) {
-                            ld[i] += 0x80 >> (b & 0x7);
-                        }
-                    }
-                }
-            }
-        }
-        return {
-            data: result,
-            density: density,
-        };
-    }
-    /**
-     * [toRaster description]
-     * @return {[type]} [description]
-     */
-    toRaster() {
-        var result = [];
-        var width = this.size.width;
-        var height = this.size.height;
-        var data = this.data;
-        // n blocks of lines
-        var n = Math.ceil(width / 8);
-        var x, y, b, c, i;
-        for (y = 0; y < height; y++) {
-            for (x = 0; x < n; x++) {
-                for (b = 0; b < 8; b++) {
-                    i = x * 8 + b;
-                    if (result[y * n + x] === undefined) {
-                        result[y * n + x] = 0;
-                    }
-                    c = x * 8 + b;
-                    if (c < width) {
-                        if (data[y * width + i]) {
-                            result[y * n + x] += 0x80 >> (b & 0x7);
-                        }
-                    }
-                }
-            }
-        }
-        return {
-            data: result,
-            width: n,
-            height: height,
-        };
-    }
-}
-exports.default = PImage;
 
 
 /***/ }),
@@ -57181,7 +57185,7 @@ SafeBuffer.allocUnsafeSlow = function (size) {
 
 module.exports = PassThrough;
 
-var Transform = __webpack_require__(165);
+var Transform = __webpack_require__(166);
 
 /*<replacement>*/
 var util = Object.create(__webpack_require__(9));
@@ -57237,11 +57241,11 @@ module.exports = __webpack_require__(17).PassThrough
 
 let util = __webpack_require__(5);
 let zlib = __webpack_require__(10);
-let ChunkStream = __webpack_require__(168);
+let ChunkStream = __webpack_require__(169);
 let FilterAsync = __webpack_require__(238);
-let Parser = __webpack_require__(172);
-let bitmapper = __webpack_require__(174);
-let formatNormaliser = __webpack_require__(175);
+let Parser = __webpack_require__(173);
+let bitmapper = __webpack_require__(175);
+let formatNormaliser = __webpack_require__(176);
 
 let ParserAsync = (module.exports = function (options) {
   ChunkStream.call(this);
@@ -57999,8 +58003,8 @@ module.exports = ZStream;
 
 var utils   = __webpack_require__(14);
 var trees   = __webpack_require__(232);
-var adler32 = __webpack_require__(166);
-var crc32   = __webpack_require__(167);
+var adler32 = __webpack_require__(167);
+var crc32   = __webpack_require__(168);
 var msg     = __webpack_require__(233);
 
 /* Public constants ==========================================================*/
@@ -61147,8 +61151,8 @@ module.exports = {
 // 3. This notice may not be removed or altered from any source distribution.
 
 var utils         = __webpack_require__(14);
-var adler32       = __webpack_require__(166);
-var crc32         = __webpack_require__(167);
+var adler32       = __webpack_require__(167);
+var crc32         = __webpack_require__(168);
 var inflate_fast  = __webpack_require__(235);
 var inflate_table = __webpack_require__(236);
 
@@ -63468,8 +63472,8 @@ module.exports = {
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
 let util = __webpack_require__(5);
-let ChunkStream = __webpack_require__(168);
-let Filter = __webpack_require__(169);
+let ChunkStream = __webpack_require__(169);
+let Filter = __webpack_require__(170);
 
 let FilterAsync = (module.exports = function (bitmapInfo) {
   ChunkStream.call(this);
@@ -63502,7 +63506,7 @@ util.inherits(FilterAsync, ChunkStream);
 let util = __webpack_require__(5);
 let Stream = __webpack_require__(12);
 let constants = __webpack_require__(11);
-let Packer = __webpack_require__(176);
+let Packer = __webpack_require__(177);
 
 let PackerAsync = (module.exports = function (opt) {
   Stream.call(this);
@@ -63723,7 +63727,7 @@ module.exports = function (dataIn, width, height, options) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let paethPredictor = __webpack_require__(171);
+let paethPredictor = __webpack_require__(172);
 
 function filterNone(pxData, pxPos, byteWidth, rawData, rawPos) {
   for (let x = 0; x < byteWidth; x++) {
@@ -63927,11 +63931,11 @@ let inflateSync = __webpack_require__(244);
 if (!zlib.deflateSync) {
   hasSyncZlib = false;
 }
-let SyncReader = __webpack_require__(177);
+let SyncReader = __webpack_require__(178);
 let FilterSync = __webpack_require__(245);
-let Parser = __webpack_require__(172);
-let bitmapper = __webpack_require__(174);
-let formatNormaliser = __webpack_require__(175);
+let Parser = __webpack_require__(173);
+let bitmapper = __webpack_require__(175);
+let formatNormaliser = __webpack_require__(176);
 
 module.exports = function (buffer, options) {
   if (!hasSyncZlib) {
@@ -64217,8 +64221,8 @@ exports.inflateSync = inflateSync;
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
 
-let SyncReader = __webpack_require__(177);
-let Filter = __webpack_require__(169);
+let SyncReader = __webpack_require__(178);
+let Filter = __webpack_require__(170);
 
 exports.process = function (inBuffer, bitmapInfo) {
   let outBuffers = [];
@@ -64252,7 +64256,7 @@ if (!zlib.deflateSync) {
   hasSyncZlib = false;
 }
 let constants = __webpack_require__(11);
-let Packer = __webpack_require__(176);
+let Packer = __webpack_require__(177);
 
 module.exports = function (metaData, opt) {
   if (!hasSyncZlib) {
