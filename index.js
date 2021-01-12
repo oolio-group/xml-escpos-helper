@@ -6060,13 +6060,13 @@ class BufferBuilder {
                 console.warn("no bitmap format specified, using default d24");
                 bitmapFormat = "\x1b\x2a\x21";
         }
-        this.buffer.write(command_1.Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
-        this.buffer.write(command_1.Command.GS_h(162)); // height
-        this.buffer.write(command_1.Command.GS_x(0)); // left spacing
-        this.buffer.write(command_1.Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
-        this.buffer.write(command_1.Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
-        this.buffer.write(command_1.Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
-        this.buffer.write("123456", "ascii");
+        // this.buffer.write(Command.GS_w(BARCODE_WIDTH.DOT_250)); // width
+        // this.buffer.write(Command.GS_h(162)); // height
+        // this.buffer.write(Command.GS_x(0)); // left spacing
+        // this.buffer.write(Command.GS_f(BARCODE_LABEL_FONT.FONT_A)); // HRI font
+        // this.buffer.write(Command.GS_H(BARCODE_LABEL_POSITION.BOTTOM)); // HRI font
+        // this.buffer.write(Command.GS_K(BARCODE_SYSTEM.UPC_A, "123456".length)); // data is a string in UTF-8
+        // this.buffer.write("123456", "ascii");
         const EOL = "\n";
         if (!(image instanceof pimage_1.default)) {
             throw new TypeError("Only escpos.PImage supported");
@@ -6078,21 +6078,23 @@ class BufferBuilder {
         // added a delay so the printer can process the graphical data
         // when connected via slower connection ( e.g.: Serial)
         this.breakLine(0); // set line spacing to 0
-        // this.buffer.write(Command.ESC_akp());
-        bitmap.data.forEach((line) => {
-            this.buffer.write(bitmapFormat);
-            this.buffer.writeUInt16LE(line.length / n);
-            this.buffer.write(line);
-            this.buffer.write(EOL);
-            // await new Promise((resolve, reject) => {
-            //   setTimeout(() => {
-            //     resolve(true);
-            //   }, 200);
-            // });
-        });
-        // this.buffer.write(data, "ascii");
+        this.buffer.write(command_1.Command.ESC_akp(32, 255, 3));
+        this.buffer.writeUInt16LE(bitmap.data.length); // data is a string in UTF-8
+        this.buffer.write(bitmap.data, "ascii");
+        // bitmap.data.forEach( (line) => {
+        //   this.buffer.write(bitmapFormat);
+        //   this.buffer.writeUInt16LE(line.length / n);
+        //   this.buffer.write(line);
+        //   this.buffer.write(EOL);
+        //   // await new Promise((resolve, reject) => {
+        //   //   setTimeout(() => {
+        //   //     resolve(true);
+        //   //   }, 200);
+        //   // });
+        // });
+        // // this.buffer.write(data, "ascii");
         this.paperCut();
-        console.log("iiin uffer builder");
+        //     console.log("iiin uffer builder");
         return this;
     }
 }
@@ -48560,7 +48562,7 @@ Command.GS_w = (n) => [Command.GS, 0x77, n]; // GSwn
 Command.GS_x = (n) => [Command.GS, 0x78, n]; // GSxn
 Command.GS_v = (n) => [Command.GS, 0x56, n]; // GSv
 Command.ESC_ak = (n) => [Command.ESC, 0x2A, n]; // ESC*n
-Command.ESC_akp = (n) => [Command.ESC, 0x2A, n]; // ESC*n
+Command.ESC_akp = (m, nL, nH) => [Command.ESC, 0x2A, m, nL, nH]; // ESC*n
 Command.LF = [Command.NL];
 
 
