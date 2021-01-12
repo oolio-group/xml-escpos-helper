@@ -262,7 +262,7 @@ export class BufferBuilder {
     // if (mode === "dhdw" || mode === "dwh" || mode === "dhw") mode = "dwdh";
     const raster = image.toRaster();
     const header = GSV0_FORMAT["GSV0_" + mode.toUpperCase()];
-    this.buffer.write(header);
+    this.buffer.write([0x1d, 0x76, 0x30, 0x00]);
     this.buffer.writeUInt16LE(raster.width);
     this.buffer.writeUInt16LE(raster.height);
     this.buffer.write(raster.data);
