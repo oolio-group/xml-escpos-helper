@@ -231,23 +231,23 @@ export class BufferBuilder {
     this.breakLine(0); // set line spacing to 0
 
 
-    this.buffer.write(Command.ESC_akp(32, 255, 3));
-    this.buffer.writeUInt16LE(bitmap.data.length); // data is a string in UTF-8
-    this.buffer.write(bitmap.data, "ascii");
+    // this.buffer.write(Command.ESC_akp(32, 255, 3));
+    // this.buffer.writeUInt16LE(bitmap.data.length); // data is a string in UTF-8
+    // this.buffer.write(bitmap.data, "ascii");
 
 
 
-    // bitmap.data.forEach( (line) => {
-    //   this.buffer.write(bitmapFormat);
-    //   this.buffer.writeUInt16LE(line.length / n);
-    //   this.buffer.write(line);
-    //   this.buffer.write(EOL);
-    //   // await new Promise((resolve, reject) => {
-    //   //   setTimeout(() => {
-    //   //     resolve(true);
-    //   //   }, 200);
-    //   // });
-    // });
+    bitmap.data.forEach( (line) => {
+      this.buffer.write(bitmapFormat);
+      this.buffer.writeUInt16LE(line.length / n);
+      this.buffer.write(line);
+      this.buffer.write(EOL);
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(true);
+      //   }, 200);
+      // });
+    });
     // // this.buffer.write(data, "ascii");
     this.paperCut()
 
