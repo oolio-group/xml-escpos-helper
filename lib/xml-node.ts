@@ -21,7 +21,7 @@ export abstract class XMLNode {
     return this.content;
   }
 
-  public abstract open(bufferBuilder: BufferBuilder): BufferBuilder;
+  public abstract open(bufferBuilder: BufferBuilder): BufferBuilder | Promise<BufferBuilder>;
 
   public abstract close(bufferBuilder: BufferBuilder): BufferBuilder;
 
