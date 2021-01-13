@@ -1,6 +1,8 @@
+Originally forked from [here](https://github.com/ingoncalves/escpos-xml)
+
 # ESC/POS XML
 
-JavaScript library that implements the thermal printer ESC / POS protocol and provides an XML interface for preparing templates for printing.
+JavaScript library that implements the thermal printer ESC / POS protocol and provides an XML interface for preparing templates for printing. works with **reactjs** and **react-native**
 
 **Features:**
 - [x] Text
@@ -15,22 +17,21 @@ JavaScript library that implements the thermal printer ESC / POS protocol and pr
 - [x] Barcode
 - [x] QRcode
 - [x] Paper cut node
-- [ ]  Image
+- [x] Image (base64) (png only)
 - [x] XML with Handlebars
 - [x] Handlebars [Moment](http://momentjs.com) Helper
 - [x] Handlebars [Numeral](http://numeraljs.com) Helper
+- [ ] Font family
 
 ## Installation
 
-Using npm:
+Using yarn:
 
 ```
-npm install --save escpos-xml
+yarn add escpos-xml
 ```
 
 ## Usage
-
-In JavaScript:
 
 ### From plain XML
 ```js
@@ -45,7 +46,7 @@ const xml = `
 `;
 
 const buffer = EscPos.getBufferXML(xml);
-// send this buffer to a stream (eg.: bluetooth)
+// send this buffer to a stream (eg.: bluetooth or socket)
 
 ```
 
@@ -83,10 +84,7 @@ const buffer = EscPos.getBufferBuilder()
 
 ```
 
-## API
-
-Comming soon...
-For a while, this example may help you:
+## Example
 
 ```js
 import { EscPos } from 'escpos-xml';
@@ -152,10 +150,35 @@ const data = {
   condictionB: true,
   barcode: '12345678',
   qrcode: 'hello qrcode',
-  underline: 'underline'
+  underline: 'underline decorated text'
 }
 
 const buffer = EscPos.getBufferFromTemplate(xml, data);
 // send this buffer to a stream (eg.: bluetooth)
 
 ```
+
+
+
+# TODO
+
+- [ ] Font styles (font family)
+- [ ] Image bitmap conversion improvements
+- [ ] jpeg support
+
+
+
+
+# Useful links / resources
+
+- [ESC / POS Commands manual](./resources/ESCPOS_Command_Manual.pdf) 
+- A [blog post](https://www.visuality.pl/posts/thermal-printer-protocols-for-image-and-text#:~:text=How%20can%20we%20print%20an,command%20language%20of%20thermal%20printers) explaiing about printing images with ESCPOS 
+- Similar library for serverside - [node-escpos](https://github.com/song940/node-escpos).
+
+> Limitations on the react-native framework
+
+- [FileReader.readAsArrayBuffer](https://github.com/facebook/react-native/issues/21209) was not implemented.
+- Most of popular image manupulation libraries does not have support for react-native. eg : [jimp](https://www.npmjs.com/package/jimp), [jpeg-js](https://www.npmjs.com/package/jpeg-js) and [sharp](https://www.npmjs.com/package/sharp). We can use these libraries with some native node lib implemented in react native (some sort of polyfill).  
+- For png this [library](https://github.com/photopea/UPNG.js) seems to be faster, but when tested this library with it, it is not retaining pixels at some places) 
+- Use this [node-libs-react-native](https://www.npmjs.com/package/node-libs-react-native) if we need to use this library in react native (adds some mock or js implementation for fs, stream etc)
+- If there is any delay you observe while printing with this library it is mostly due to image manipulations (try without image :mask: )
