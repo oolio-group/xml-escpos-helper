@@ -166,6 +166,7 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 - [ ] Font styles (font family)
 - [ ] Image bitmap conversion improvements
 - [ ] jpeg support
+- [ ] Removed uglify for some reason, need to bring it back
 
 
 
