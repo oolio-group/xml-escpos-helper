@@ -2,11 +2,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("escpos-xml", [], factory);
+		define("xml-escpos-helper", [], factory);
 	else if(typeof exports === 'object')
-		exports["escpos-xml"] = factory();
+		exports["xml-escpos-helper"] = factory();
 	else
-		root["escpos-xml"] = factory();
+		root["xml-escpos-helper"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
