@@ -162,6 +162,7 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 
 # TODO
 
+- [ ] remove build files from source code
 - [ ] Font styles (font family)
 - [ ] Image bitmap conversion improvements
 - [ ] jpeg support
