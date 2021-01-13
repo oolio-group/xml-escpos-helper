@@ -28,7 +28,7 @@ JavaScript library that implements the thermal printer ESC / POS protocol and pr
 Using yarn:
 
 ```
-yarn add escpos-xml
+yarn add xml-escpos-helper
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ yarn add escpos-xml
 ### From plain XML
 ```js
 
-import { EscPos } from 'escpos-xml';
+import { EscPos } from 'xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -53,7 +53,7 @@ const buffer = EscPos.getBufferXML(xml);
 ### From XML + Handlebars
 ```js
 
-import { EscPos } from 'escpos-xml';
+import { EscPos } from 'xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -74,7 +74,7 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 ### From Builder
 ```js
 
-import { EscPos } from 'escpos-xml';
+import { EscPos } from 'xml-escpos-helper';
 
 
 const buffer = EscPos.getBufferBuilder()
@@ -87,7 +87,7 @@ const buffer = EscPos.getBufferBuilder()
 ## Example
 
 ```js
-import { EscPos } from 'escpos-xml';
+import { EscPos } from 'xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>

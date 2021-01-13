@@ -19,7 +19,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: 'index.js',
-    library: 'escpos-xml',
+    library: 'xml-escpos-helper',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
