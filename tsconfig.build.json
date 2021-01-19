@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2019",
+    "outDir": "lib",
+    "declaration": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
+  },
+
+  "exclude": ["node_modules", "dist"]
+}

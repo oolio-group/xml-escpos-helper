@@ -1,0 +1,10 @@
+**/node_modules
+**/build
+**/dist
+**/.github
+eslint_report.json
+.nyc_output
+coverage
+.vscode
+**/.jest
+.jest

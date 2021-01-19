@@ -1,0 +1,26 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "no-trailing-spaces": "warn",
+    "comma-dangle": "off",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "semi": "warn",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/camelcase": "off"
+  }
+}

@@ -1,34 +1,37 @@
 {
-  "name": "xml-escpos-helper",
-  "version": "1.0.0",
+  "name": "@hitz-group/xml-escpos-helper",
   "description": "ESC/POS with XML interface",
-  "homepage": "https://github.com/hitz-group/xml-escpos-helper#README",
-  "author": "till",
-  "license": "Apache-2.0",
-  "main": "index.js",
-  "types": "lib/index",
-  "engines": {
-    "node": ">=4.0.0"
-  },
-  "scripts": {
-    "build": "npm run lint && npm run webpack:build",
-    "watch": "npm run webpack:watch",
-    "webpack:build": "webpack --config webpack.config.js",
-    "webpack:watch": "webpack --config webpack.config.js --watch",
-    "lint": "tslint --format codeFrame --project tslint.json lib/**/*.ts",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:hitz-group/xml-escpos-helper.git"
-  },
   "keywords": [
     "escpos",
     "esc",
     "pos",
     "xml",
     "printer"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "lib/index",
+  "types": "lib",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "yarn  clean && yarn  compile",
+    "build:watch": "yarn compile -- -w",
+    "clean": "rm -rf ./lib && rm -rf tsconfig.build.tsbuildinfo",
+    "compile": "tsc -p ./tsconfig.build.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/hitz-group/xml-escpos-helper.git"
+  },
+  "contributors": [
+    "Snehit Velma <snehithvelma@gmail.com>"
   ],
   "bugs": {
     "url": "https://github.com/hitz-group/xml-escpos-helper/issues"
