@@ -1,22 +1,9 @@
 {
+  "extends": "./tsconfig.build.json",
+
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2015",
-    "outDir": "./dist/",
-    "lib": ["es6", "dom"]
-  },
-  "include": ["lib/**/*.ts"],
-  "exclude": ["node_modules"],
-  "compileOnSave": false,
-  "atom": {
-    "rewriteTsconfig": false
+    "resolveJsonModule": true
   }
 }

@@ -11,13 +11,10 @@
     "node": ">=4.0.0"
   },
   "scripts": {
-    "build": "npm run lint && npm run webpack:build",
-    "watch": "npm run webpack:watch",
-    "webpack:build": "webpack --config webpack.config.js",
-    "webpack:watch": "webpack --config webpack.config.js --watch",
-    "lint": "tslint --format codeFrame --project tslint.json lib/**/*.ts",
-    "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "yarn  clean && yarn  compile",
+    "build:watch": "yarn compile -- -w",
+    "clean": "rm -rf ./lib && rm -rf tsconfig.build.tsbuildinfo",
+    "compile": "tsc -p ./tsconfig.build.json"
   },
   "repository": {
     "type": "git",
