@@ -18,8 +18,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:hitz-group/xml-escpos-helper.git"
+    "url": "http://github.com/hitz-group/xml-escpos-helper.git"
   },
+  "contributors": [
+    "Snehit Velma <snehithvelma@gmail.com>"
+  ],
   "keywords": [
     "escpos",
     "esc",
