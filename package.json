@@ -1,15 +1,25 @@
 {
-  "name": "xml-escpos-helper",
-  "version": "0.0.4",
+  "name": "@hitz-group/xml-escpos-helper",
   "description": "ESC/POS with XML interface",
-  "homepage": "https://github.com/hitz-group/xml-escpos-helper#README",
-  "author": "till",
-  "license": "Apache-2.0",
-  "main": "index.js",
-  "types": "lib/index",
+  "keywords": [
+    "escpos",
+    "esc",
+    "pos",
+    "xml",
+    "printer"
+  ],
+  "version": "0.0.5",
+  "files": [
+    "lib",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "lib/index",
+  "types": "lib",
   "engines": {
     "node": ">=4.0.0"
   },
+  "license": "Apache-2.0",
   "scripts": {
     "build": "yarn  clean && yarn  compile",
     "build:watch": "yarn compile -- -w",
@@ -22,13 +32,6 @@
   },
   "contributors": [
     "Snehit Velma <snehithvelma@gmail.com>"
-  ],
-  "keywords": [
-    "escpos",
-    "esc",
-    "pos",
-    "xml",
-    "printer"
   ],
   "bugs": {
     "url": "https://github.com/hitz-group/xml-escpos-helper/issues"
