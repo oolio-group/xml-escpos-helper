@@ -19,8 +19,6 @@ JavaScript library that implements the thermal printer ESC / POS protocol and pr
 - [x] Paper cut node
 - [x] Image (base64) (png only)
 - [x] XML with mustache
-- [ ] Handlebars [Moment](http://momentjs.com) Helper
-- [ ] Handlebars [Numeral](http://numeraljs.com) Helper
 - [ ] Font family
 
 ## Installation
