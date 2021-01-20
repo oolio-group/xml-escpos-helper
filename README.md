@@ -18,9 +18,9 @@ JavaScript library that implements the thermal printer ESC / POS protocol and pr
 - [x] QRcode
 - [x] Paper cut node
 - [x] Image (base64) (png only)
-- [x] XML with Handlebars
-- [x] Handlebars [Moment](http://momentjs.com) Helper
-- [x] Handlebars [Numeral](http://numeraljs.com) Helper
+- [x] XML with mustache
+- [ ] Handlebars [Moment](http://momentjs.com) Helper
+- [ ] Handlebars [Numeral](http://numeraljs.com) Helper
 - [ ] Font family
 
 ## Installation
@@ -103,8 +103,6 @@ const xml = `
           </small>
       </align>
       <small>
-          <text-line>Date: {{moment date format="DD/MM/YYYY HH:mm:ss"}}</text-line>
-          <text-line size="1:0">{{numeral price format="$ 0,0.00"}}</text-line>
           <text-line size="1:0">{{paddedString}}</text-line>
       </small>
       <line-feed />
@@ -118,13 +116,13 @@ const xml = `
           </white-mode>
           <line-feed />
           <bold>
-              {{#if condictionA}}
-              <text-line size="1:0">True A</text-line>
-              {{else if condictionB}}
-              <text-line size="1:0">True B</text-line>
-              {{else}}
-              <text-line size="1:0">False</text-line>
-              {{/if}}
+              {{# condictionA}}
+                <text-line size="1:0">True A</text-line>
+                  {{#condictionB}}
+                      <text-line size="1:0">True B</text-line>
+                  {{/condictionB}}
+                <text-line size="1:0">False</text-line>
+              {{/condictionA}}
           </bold>
       </align>
       <line-feed />
@@ -143,7 +141,6 @@ const data = {
   title: 'Tile',
   subtitle: 'Subtitle',
   description: 'This is a description',
-  date: new Date(),
   price: 1.99,
   paddedString: '&nbsp;&nbsp;&nbsp;&nbsp;Line padded with 4 spaces',
   condictionA: false,
