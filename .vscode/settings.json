@@ -1,11 +1,12 @@
 {
   "files.exclude": {
     "**/.git": true,
-    "**/.svn": true,
+    "**/.github": true,
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/node_modules": true,
-    "**/coverage": true
+    "**/coverage": true,
+    "**/lib": true
   }
 }
