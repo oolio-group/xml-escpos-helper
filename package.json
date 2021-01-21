@@ -1,5 +1,5 @@
 {
-  "name": "@hitz-group/xml-escpos-helper",
+  "name": "@tillpos/xml-escpos-helper",
   "description": "ESC/POS with XML interface",
   "keywords": [
     "escpos",
