@@ -13,7 +13,7 @@ export default class ImageNode extends XMLNode {
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
     const img_data = PNG.sync.read(
-      Buffer.from(this.content.slice("data:image/png;base64,".length), "base64")
+      Buffer.from(this.content.replace(/&#x2F/g, '/').slice("data:image/png;base64,".length), "base64")
     );
 
     const pixels = ndarray(
