@@ -1,10 +1,9 @@
 name: npm-publish
 on:
   push:
-    branches:
-      - master
-      - without-handlebar
-      - with-mustache
+    tags:
+      - 'v*.*.*'
+
 jobs:
   npm-publish:
     name: npm-publish
@@ -12,21 +11,16 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
       with:
-        token: ${{ secrets.DEPLOYMENT_TOKEN }}
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
     - name: Install Node Dependencies
       run: yarn install
     - name: Build packages
       run: yarn build
       env:
         CI: "TRUE"
-    - name: Publish if version has been updated
-      uses: pascalgn/npm-publish-action@06e0830ea83eea10ed4a62654eeaedafb8bf50fc
-      with: # All of theses inputs are optional
-        tag_name: "v%s"
-        tag_message: "v%s"
-        commit_pattern: "^Release (\\S+)"
-        workspace: "."
+    - run: npm publish --access public
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
