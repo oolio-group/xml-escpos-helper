@@ -2,7 +2,8 @@ Originally forked from [here](https://github.com/ingoncalves/escpos-xml)
 
 # ESC/POS XML
 
-JavaScript library that implements the thermal printer ESC / POS protocol and provides an XML interface for preparing templates for printing. works with **reactjs** and **react-native**
+Cross platform JavaScript library that implements the thermal printer ESC / POS protocol and provides an XML interface for preparing templates for printing.
+
 
 **Features:**
 - [x] Text
@@ -21,12 +22,21 @@ JavaScript library that implements the thermal printer ESC / POS protocol and pr
 - [x] XML with mustache
 - [ ] Font family
 
+## Tested On (manual)
+
+- [x] React Native (Android)
+- [ ] React Native (iOS)
+- [ ] React Native Web
+- [x] Server side
+- [x] Other node environment (terminal)
+
+
 ## Installation
 
 Using yarn:
 
 ```
-yarn add xml-escpos-helper
+yarn add @tillpos/xml-escpos-helper
 ```
 
 ## Usage
@@ -34,7 +44,7 @@ yarn add xml-escpos-helper
 ### From plain XML
 ```js
 
-import { EscPos } from 'xml-escpos-helper';
+import { EscPos } from '@tillpos/xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -48,10 +58,10 @@ const buffer = EscPos.getBufferXML(xml);
 
 ```
 
-### From XML + Handlebars
+### From XML + mustache
 ```js
 
-import { EscPos } from 'xml-escpos-helper';
+import { EscPos } from '@tillpos/xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -72,7 +82,7 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 ### From Builder
 ```js
 
-import { EscPos } from 'xml-escpos-helper';
+import { EscPos } from '@tillpos/xml-escpos-helper';
 
 
 const buffer = EscPos.getBufferBuilder()
@@ -85,7 +95,7 @@ const buffer = EscPos.getBufferBuilder()
 ## Example
 
 ```js
-import { EscPos } from 'xml-escpos-helper';
+import { EscPos } from '@tillpos/xml-escpos-helper';
 
 const xml = `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -152,7 +162,6 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 // send this buffer to a stream (eg.: bluetooth)
 
 ```
-
 
 
 # TODO
