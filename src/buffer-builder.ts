@@ -178,7 +178,7 @@ export class BufferBuilder {
    * @return BufferBuilder
    */
   public paperCut(): BufferBuilder {
-    this.buffer.write(Command.GS_v(1));
+    this.buffer.write(Command.GS_v(66));
     return this;
   }
 
