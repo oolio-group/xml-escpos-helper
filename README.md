@@ -4,8 +4,8 @@ Originally forked from [here](https://github.com/ingoncalves/escpos-xml)
 
 Cross platform JavaScript library that implements the thermal printer ESC / POS protocol and provides an XML interface for preparing templates for printing.
 
+## Features
 
-**Features:**
 - [x] Text
 - [x] Text line
 - [x] Feed line
@@ -20,162 +20,104 @@ Cross platform JavaScript library that implements the thermal printer ESC / POS 
 - [x] Paper cut node
 - [x] Image (base64) (png only)
 - [x] XML with mustache
-- [ ] Font family
 
-## Tested On (manual)
+
+## Tested manually on following environments or platforms
 
 - [x] React Native (Android)
-- [ ] React Native (iOS)
-- [ ] React Native Web
-- [x] Server side
+- [x] React Native (iOS)
+- [x] React Native Web
+- [x] Server side (NodeJs)
+- [x] Desktop applications (nwjs &amp; electron)
 - [x] Other node environment (terminal)
 
 
 ## Installation
 
-Using yarn:
-
-```
-yarn add @tillpos/xml-escpos-helper
+```bash
+  yarn add @tillpos/xml-escpos-helper
 ```
 
-## Usage
+## Examples
 
-### From plain XML
-```js
+### With an XML template +  plain object input (regular text).
+
+```ts
 
 import { EscPos } from '@tillpos/xml-escpos-helper';
 
-const xml = `
+// store this template somewhere `s3` or as `static asset` based on your preference 
+const template = `
   <?xml version="1.0" encoding="UTF-8"?>
   <document>
-    <text-line>hello world</text-line>
+    <align mode="center">
+      <bold>
+        <text-line size="1:0">{{title}}</text-line>
+      </bold>
+    </align>
+
+    {{#thankyouNote}}
+    <align mode="center">
+      <text-line size="0:0">  {{{thankyouNote}}}</text-line>
+    </align>
+
+    <line-feed />
+
+    <paper-cut />
   </document>
 `;
 
-const buffer = EscPos.getBufferXML(xml);
-// send this buffer to a stream (eg.: bluetooth or socket)
-
-```
-
-### From XML + mustache
-```js
-
-import { EscPos } from '@tillpos/xml-escpos-helper';
-
-const xml = `
-  <?xml version="1.0" encoding="UTF-8"?>
-  <document>
-    <text-line>{{foo}}</text-line>
-  </document>
-`;
-
-const data = {
-  foo: 'hello word'
+const input = {
+  title: 'Sample',
+  thankyouNote: 'Welcome...!'
 };
 
-const buffer = EscPos.getBufferFromTemplate(xml, data);
-// send this buffer to a stream (eg.: bluetooth)
+const buffer = EscPos.getBufferFromTemplate(template, input);
+// send this buffer to a stream (eg.: bluetooth or wifi)
 
 ```
 
-### From Builder
-```js
+### With an XML template +  png image (base64)
 
-import { EscPos } from '@tillpos/xml-escpos-helper';
-
-
-const buffer = EscPos.getBufferBuilder()
-                             .printTextLine('hello world')
-                             .build();
-// send this buffer to a stream (eg.: bluetooth)
-
-```
-
-## Example
-
-```js
-import { EscPos } from '@tillpos/xml-escpos-helper';
-
-const xml = `
-  <?xml version="1.0" encoding="UTF-8"?>
+```ts
+  const template =  `<?xml version="1.0" encoding="UTF-8"?>
   <document>
-      <line-feed />
-      <align mode="center">
-          <bold>
-              <text-line size="1:1">{{title}}</text-line>
-          </bold>
-          <line-feed />
-          <small>
-              <text-line>{{subtitle}}</text-line>
-          </small>
-      </align>
-      <small>
-          <text-line size="1:0">{{paddedString}}</text-line>
-      </small>
-      <line-feed />
-      <underline>
-        <text-line>{{underline}}</text-line>
-      </underline>
-      <line-feed />
-      <align mode="center">
-          <white-mode>
-              <text-line size="1:1">{{description}}</text-line>
-          </white-mode>
-          <line-feed />
-          <bold>
-              {{# condictionA}}
-                <text-line size="1:0">True A</text-line>
-                  {{#condictionB}}
-                      <text-line size="1:0">True B</text-line>
-                  {{/condictionB}}
-                <text-line size="1:0">False</text-line>
-              {{/condictionA}}
-          </bold>
-      </align>
-      <line-feed />
-      <align mode="center">
-          <barcode system="CODE_128" width="DOT_250">{{barcode}}</barcode>
-      </align>
-      <line-feed />
-      <align mode="center">
-          <qrcode ecl="M">{{qrcode}}</qrcode>
-      </align>
-    <paper-cut/>
-  </document>
-`;
+    <align mode="center">
+      <bold>
+        <text-line size="1:0">{{title}}</text-line>
+      </bold>
+        
+      <image density="d24">
+        {{base64PngImage}}
+      </image>
+    </align>    
+  </document>`;
 
-const data = {
-  title: 'Tile',
-  subtitle: 'Subtitle',
-  description: 'This is a description',
-  price: 1.99,
-  paddedString: '&nbsp;&nbsp;&nbsp;&nbsp;Line padded with 4 spaces',
-  condictionA: false,
-  condictionB: true,
-  barcode: '12345678',
-  qrcode: 'hello qrcode',
-  underline: 'underline decorated text'
-}
+  const input = {
+    title: 'PNG - base64',
+    base64PngImage: `data:image/png;base64,iVBORw0KGgoAAA+P/AaNn2GPEMgEFAAAAAElFTkSuQmCC`
+  };
 
-const buffer = EscPos.getBufferFromTemplate(xml, data);
-// send this buffer to a stream (eg.: bluetooth)
-
+  const buffer = EscPos.getBufferFromTemplate(template, input);
 ```
 
+---
 
-# TODO
+## TODO
 
-- [ ] remove build files from source code
 - [ ] Font styles (font family)
 - [ ] Image bitmap conversion improvements
 - [ ] jpeg support
+- [ ] Add example apps to repo
 - [ ] Removed uglify for some reason, need to bring it back
+- [ ] Improve image rendering
+
+## Common issues
+
+- If there is any delay you observe while printing with this library it is mostly due to image manipulations (try without image :mask: )
 
 
-
-
-# Useful links / resources
+## Useful links / resources
 
 - [ESC / POS Commands manual](./resources/ESCPOS_Command_Manual.pdf) 
 - A [blog post](https://www.visuality.pl/posts/thermal-printer-protocols-for-image-and-text#:~:text=How%20can%20we%20print%20an,command%20language%20of%20thermal%20printers) explaiing about printing images with ESCPOS 
@@ -187,4 +129,8 @@ const buffer = EscPos.getBufferFromTemplate(xml, data);
 - Most of popular image manupulation libraries does not have support for react-native. eg : [jimp](https://www.npmjs.com/package/jimp), [jpeg-js](https://www.npmjs.com/package/jpeg-js) and [sharp](https://www.npmjs.com/package/sharp). We can use these libraries with some native node lib implemented in react native (some sort of polyfill).  
 - For png this [library](https://github.com/photopea/UPNG.js) seems to be faster, but when tested this library with it, it is not retaining pixels at some places) 
 - Use this [node-libs-react-native](https://www.npmjs.com/package/node-libs-react-native) if we need to use this library in react native (adds some mock or js implementation for fs, stream etc)
-- If there is any delay you observe while printing with this library it is mostly due to image manipulations (try without image :mask: )
+
+---
+
+Contributions of any kind welcome! :heart:
+

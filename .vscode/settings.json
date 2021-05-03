@@ -9,6 +9,7 @@
     "**/coverage": true,
     "**/lib": true,
     "**/.vscode": true,
-    "yarn.lock": true
+    "**/yarn.lock": true,
+    "**/dist": true
   }
 }

@@ -1,0 +1,24 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Using in Nodejs env",
+  "main": "index.js",
+  "repository": "http://github.com/hitz-group/xml-escpos-helper.git",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "clean": "rm -rf ./dist && rm -rf ./tsconfig.build.tsbuildinfo",
+    "compile": "yarn clean && tsc  -p ./tsconfig.json",
+    "print:basic": "yarn compile && yarn node ./dist/basic.js",
+    "print:image": "yarn compile && yarn node ./dist/printImage.js",
+    "print:table": "yarn compile && yarn node ./dist/printTable.js",
+    "print:barcode": "yarn compile && yarn node ./dist/printBarcode.js"
+  },
+  "dependencies": {
+    "@tillpos/xml-escpos-helper": "^0.1.8",
+    "table": "^6.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
