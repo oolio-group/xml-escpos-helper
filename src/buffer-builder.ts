@@ -182,6 +182,18 @@ export class BufferBuilder {
     return this;
   }
 
+  /**
+   * Register open cash drawer action
+   * @return BufferBuilder
+   */
+  public openCashDrawer(): BufferBuilder {
+    // kick drawer 1, pin 2
+    this.buffer.write(Command.CD_KICK_1);
+    // kick drawer 2, pin 5
+    this.buffer.write(Command.CD_KICK_2);
+    return this;
+  }
+
   public printImage(image: Image, mode: RASTER_MODE): BufferBuilder {
     if (!(image instanceof Image)) {
       throw new TypeError("not supported");
