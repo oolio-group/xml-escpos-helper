@@ -43,4 +43,8 @@ export class Command {
 
   public static LF: number[]       = [Command.NL];
 
+
+  // Cash Drawer
+  public static CD_KICK_1          = (): number[] => [Command.ESC, 0x70, 0x00];  // Sends a pulse to pin 2
+  public static CD_KICK_2          = (): number[] => [Command.ESC, 0x70, 0x01];  // Sends a pulse to pin 5
 }
