@@ -8,13 +8,13 @@
     "xml",
     "printer"
   ],
-  "version": "0.1.9",
+  "version": "0.1.10",
   "files": [
     "lib",
     "LICENSE",
     "README.md"
   ],
-  "main": "lib/index",
+  "main": "lib/src/index",
   "types": "lib",
   "engines": {
     "node": ">=4.0.0"

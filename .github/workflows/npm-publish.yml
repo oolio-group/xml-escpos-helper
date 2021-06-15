@@ -16,7 +16,7 @@ jobs:
         node-version: 12
         registry-url: https://registry.npmjs.org/
     - name: Install Node Dependencies
-      run: yarn install; cd examples; yarn install; cd ..
+      run: yarn install
     - name: Build packages
       run: yarn build
       env:
