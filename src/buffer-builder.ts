@@ -188,9 +188,9 @@ export class BufferBuilder {
    */
   public openCashDrawer(): BufferBuilder {
     // kick drawer 1, pin 2
-    this.buffer.write(Command.CD_KICK_1);
+    this.buffer.write(Command.CD_KICK_1());
     // kick drawer 2, pin 5
-    this.buffer.write(Command.CD_KICK_2);
+    this.buffer.write(Command.CD_KICK_2());
     return this;
   }
 
