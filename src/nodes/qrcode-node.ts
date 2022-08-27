@@ -8,35 +8,36 @@ export default class QRcodeNode extends XMLNode {
   }
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
-    let version, errorCorrectionLevel, componentTypes;
+    // let version, errorCorrectionLevel, componentTypes;
 
-    if (/\d+/.test(this.attributes.version)) {
-      version = parseInt(this.attributes.version);
-    } else {
-      version = 1;
-    }
+    // if (/\d+/.test(this.attributes.version)) {
+    //   version = parseInt(this.attributes.version);
+    // } else {
+    //   version = 1;
+    // }
 
-    switch (this.attributes.ecl) {
-      case 'L':
-        errorCorrectionLevel = QR_EC_LEVEL.L; break;
-      case 'M':
-        errorCorrectionLevel = QR_EC_LEVEL.M; break;
-      case 'Q':
-        errorCorrectionLevel = QR_EC_LEVEL.Q; break;
-      case 'H':
-        errorCorrectionLevel = QR_EC_LEVEL.H; break;
-      default:
-        errorCorrectionLevel = QR_EC_LEVEL.H;
-    }
+    // switch (this.attributes.ecl) {
+    //   case 'L':
+    //     errorCorrectionLevel = QR_EC_LEVEL.L; break;
+    //   case 'M':
+    //     errorCorrectionLevel = QR_EC_LEVEL.M; break;
+    //   case 'Q':
+    //     errorCorrectionLevel = QR_EC_LEVEL.Q; break;
+    //   case 'H':
+    //     errorCorrectionLevel = QR_EC_LEVEL.H; break;
+    //   default:
+    //     errorCorrectionLevel = QR_EC_LEVEL.H;
+    // }
 
-    if (/\d+/.test(this.attributes.componentTypes)) {
-      componentTypes = parseInt(this.attributes.componentTypes);
-    } else {
-      componentTypes = 8;
-    }
+    // if (/\d+/.test(this.attributes.componentTypes)) {
+    //   componentTypes = parseInt(this.attributes.componentTypes);
+    // } else {
+    //   componentTypes = 8;
+    // }
 
     if (this.content) {
-      bufferBuilder.printQRcode(this.content, version, errorCorrectionLevel, componentTypes);
+      // bufferBuilder.printQRcode(this.content, version, errorCorrectionLevel, componentTypes);
+      bufferBuilder.printQRcode(this.content);
     }
 
     return bufferBuilder;

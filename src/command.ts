@@ -47,4 +47,16 @@ export class Command {
   // Cash Drawer
   public static CD_KICK_1          = (): number[] => [Command.ESC, 0x70, 0x00];  // Sends a pulse to pin 2
   public static CD_KICK_2          = (): number[] => [Command.ESC, 0x70, 0x01];  // Sends a pulse to pin 5
+
+  //QR Code
+  public static QR_MODEL =(): number[]=> [29, 40, 107, 4, 0, 49, 65, 50, 0]; //Select QR model
+  //[29 40 107 4 0 49 65 n1 n2]
+  public static QR_SIZE =(): number[] => [29, 40, 107, 3, 0, 49, 67, 8]; //Set QR size
+  //[29 40 107 3 0 49 67 n]
+  public static EC_LEVEL =(): number[] => [29, 40, 107, 3, 0, 49, 69, 48]; //Set error correction level for QR
+  //[29 40 107 3 0 49 69 n]
+  public static STORE_QR =(pL, pH): number[] => [29, 40, 107, pL, pH, 49, 80, 48]; //Store QR data in symbol storage area
+  //[29 40 107 pL pH 49 80 48 d1…dk]
+  public static PRINT_QR =(): number[] => [29, 40, 107, 3, 0, 49, 81, 48]; //Print QR from data in symbol storage area
+  //[29 40 107 3 0 49 81 m]
 }

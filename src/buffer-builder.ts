@@ -116,17 +116,32 @@ export class BufferBuilder {
     return this;
   }
 
-  public printQRcode(
-    data: string,
-    version: number = 1,
-    errorCorrectionLevel: QR_EC_LEVEL = QR_EC_LEVEL.H,
-    componentTypes: number = 8
-  ): BufferBuilder {
-    this.buffer.write(
-      Command.ESC_Z(version, errorCorrectionLevel, componentTypes)
-    );
-    this.buffer.writeUInt16LE(data.length); // data is a string in UTF-8
+  // public printQRcode(
+  //   data: string,
+  //   version: number = 1,
+  //   errorCorrectionLevel: QR_EC_LEVEL = QR_EC_LEVEL.H,
+  //   componentTypes: number = 8
+  // ): BufferBuilder {
+  //   this.buffer.write(
+  //     Command.ESC_Z(version, errorCorrectionLevel, componentTypes)
+  //   );
+  //   this.buffer.writeUInt16LE(data.length); // data is a string in UTF-8
+  //   this.buffer.write(data, "ascii");
+  //   return this;
+  // }
+
+  public printQRcode(data: string): BufferBuilder {
+    let x = data.length + 3;
+    let pL = Math.floor(x % 256);
+    let pH = Math.floor(x / 256);
+
+    this.buffer.write(Command.QR_MODEL());
+    this.buffer.write(Command.QR_SIZE());
+    this.buffer.write(Command.EC_LEVEL());
+    this.buffer.write(Command.STORE_QR(pL, pH));
     this.buffer.write(data, "ascii");
+    this.buffer.write(Command.PRINT_QR());
+
     return this;
   }
 
