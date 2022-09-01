@@ -15,7 +15,7 @@
     "README.md"
   ],
   "main": "lib/index",
-  "types": "lib",
+  "types": "lib/index.d.ts",
   "engines": {
     "node": ">=4.0.0"
   },
@@ -39,7 +39,7 @@
   "dependencies": {
     "buffer": "^6.0.3",
     "mustache": "^4.1.0",
-    "mutable-buffer": "2.0.3",
+    "mutable-buffer": "4.0.2",
     "ndarray": "^1.0.19",
     "pngjs": "^6.0.0",
     "xml-parser": "^1.2.1"

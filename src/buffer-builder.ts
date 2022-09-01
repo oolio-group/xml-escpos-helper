@@ -171,7 +171,7 @@ export class BufferBuilder {
       this.buffer.write(Command.ESC_init);
     }
 
-    return this.buffer.flush();
+    return this.buffer.flush() as unknown as number[];
   }
 
   /**

@@ -326,10 +326,12 @@ mustache@^4.1.0:
   resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.1.0.tgz#8c1b042238a982d2eb2d30efc6c14296ae3f699d"
   integrity sha512-0FsgP/WVq4mKyjolIyX+Z9Bd+3WS8GOwoUTyKXT5cTYMGeauNTi2HPCwERqseC1IHAy0Z7MDZnJBfjabd4O8GQ==
 
-mutable-buffer@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/mutable-buffer/-/mutable-buffer-2.0.3.tgz#67bca5568bf15d3f6035fb716e3899dc44901c8c"
-  integrity sha1-Z7ylVovxXT9gNftxbjiZ3ESQHIw=
+mutable-buffer@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/mutable-buffer/-/mutable-buffer-4.0.2.tgz#610a22a4e628ce98b7a4813729d0fc52a49ebcdf"
+  integrity sha512-KmdusLZjoMEOClFleHXmOhXTcJwe8ePesZKm4fSU9yhatuRLbS/8MoiWGr23SZaofR8mnpRlgTO4Gcj/86A4sQ==
+  dependencies:
+    buffer "^6.0.3"
 
 ndarray@^1.0.19:
   version "1.0.19"
