@@ -9,7 +9,7 @@ export class BufferBuilder {
 
     if (this.defaultSettings) {
       this.resetCharacterSize();
-      this.resetCharacterCodeTable();
+      this.resetCharacterEncoding();
     }
   }
 
@@ -33,6 +33,11 @@ export class BufferBuilder {
 
   public resetCharacterSize(): BufferBuilder {
     this.buffer.write(Command.GS_exclamation(0));
+    return this;
+  }
+
+  public resetCharacterEncoding(): BufferBuilder {
+    this.buffer.write(Command.FS_ob_C_fe_utf);
     return this;
   }
 
@@ -142,7 +147,7 @@ export class BufferBuilder {
   }
 
   public printText(text: string): BufferBuilder {
-    this.buffer.write(text, "ascii");
+    this.buffer.write(text, "utf8");
     return this;
   }
 
