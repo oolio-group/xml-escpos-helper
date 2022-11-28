@@ -3,10 +3,13 @@ import { MutableBuffer } from "mutable-buffer";
 import Image from "./image";
 export class BufferBuilder {
   private buffer: MutableBuffer;
+  private hasGSCommand: boolean;
+  private doEmphasise: boolean;
 
   constructor(private defaultSettings: boolean = true) {
     this.buffer = new MutableBuffer();
-
+    this.hasGSCommand = true;
+    this.doEmphasise = false;
     if (this.defaultSettings) {
       this.resetCharacterSize();
       this.resetCharacterEncoding();
@@ -26,13 +29,33 @@ export class BufferBuilder {
     width: number = 0,
     height: number = 0
   ): BufferBuilder {
-    let size = (width << 4) + height;
-    this.buffer.write(Command.GS_exclamation(size));
+    if(this.hasGSCommand)
+    {
+      let size = (width << 4) + height;
+      this.buffer.write(Command.GS_exclamation(size));
+    }
+    else{
+      let mode = (width>0?(1<<5):0)+(height>0?(1<<4):0)+(this.doEmphasise?(1<<3):0)+1;
+      this.buffer.write(Command.ESC_exclamation(mode));
+    }
+
+    return this;
+  }
+
+  public setPrintMode(setting:boolean): BufferBuilder {
+    this.hasGSCommand = setting;
     return this;
   }
 
   public resetCharacterSize(): BufferBuilder {
-    this.buffer.write(Command.GS_exclamation(0));
+    if(this.hasGSCommand)
+    {
+      this.buffer.write(Command.GS_exclamation(0));
+    }
+    else
+    {
+      this.buffer.write(Command.ESC_exclamation(1));
+    }
     return this;
   }
 
@@ -52,12 +75,12 @@ export class BufferBuilder {
   }
 
   public startBold(): BufferBuilder {
-    this.buffer.write(Command.ESC_E(1));
+    this.hasGSCommand? this.buffer.write(Command.ESC_E(1)):this.doEmphasise=true;
     return this;
   }
 
   public endBold(): BufferBuilder {
-    this.buffer.write(Command.ESC_E(0));
+    this.hasGSCommand? this.buffer.write(Command.ESC_E(0)):this.doEmphasise=false;
     return this;
   }
 

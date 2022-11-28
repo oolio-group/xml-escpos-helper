@@ -13,6 +13,7 @@ import WhiteModeNode from './nodes/white-mode-node';
 import PaperCutNode from './nodes/paper-cut-node';
 import ImageNode from './nodes/image-node';
 import OpenCashDrawerNode from './nodes/open-cash-drawer-node';
+import PrintModeNode from './nodes/print-mode';
 
 export class NodeFactory {
 
@@ -33,6 +34,7 @@ export class NodeFactory {
       case 'paper-cut': return new PaperCutNode(node);
       case 'open-cash-drawer': return new OpenCashDrawerNode(node);
       case 'image':       return new ImageNode(node);
+      case 'print-mode':  return new PrintModeNode(node);
 
       default:           return null;
     }
