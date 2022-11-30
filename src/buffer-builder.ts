@@ -10,10 +10,7 @@ export class BufferBuilder {
     this.buffer = new MutableBuffer();
     this.hasGSCommand = true;
     this.doEmphasise = false;
-    if (this.defaultSettings) {
-      this.resetCharacterSize();
-      this.resetCharacterEncoding();
-    }
+
   }
 
   public end(): BufferBuilder {
@@ -44,6 +41,8 @@ export class BufferBuilder {
 
   public setPrintMode(setting:boolean): BufferBuilder {
     this.hasGSCommand = setting;
+    if(setting) this.resetCharacterEncoding();
+    this.resetCharacterSize();
     return this;
   }
 
