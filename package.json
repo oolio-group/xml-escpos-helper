@@ -45,8 +45,11 @@
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.4.0",
     "@types/node": "^14.14.20",
     "@types/xml-parser": "^1.2.29",
+    "jest": "^29.4.3",
+    "ts-jest": "^29.0.5",
     "ts-loader": "^2.3.4",
     "tslint": "^5.7.0",
     "tslint-eslint-rules": "^4.1.1",
