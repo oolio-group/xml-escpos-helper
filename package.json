@@ -24,7 +24,8 @@
     "build": "yarn  clean && yarn  compile",
     "build:watch": "yarn compile -- -w",
     "clean": "rm -rf ./lib && rm -rf tsconfig.build.tsbuildinfo",
-    "compile": "tsc -p ./tsconfig.build.json"
+    "compile": "tsc -p ./tsconfig.build.json",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
