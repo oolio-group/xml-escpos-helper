@@ -27,6 +27,10 @@ export class BufferBuilder {
     return this;
   }
 
+  public rotatePage(o: PAGE_ORIENTATION) {
+    this.buffer.write(Command.ESC_T(o));
+  }
+
   public resetCharacterCodeTable(): BufferBuilder {
     this.buffer.write(Command.ESC_t(0));
     return this;
@@ -314,4 +318,11 @@ export enum RASTER_MODE {
   DOUBLE_WIDTH = 1,
   DOUBLE_HEIGHT = 2,
   DOUBLE_WIDTH_HEIGHT = 3,
+}
+
+export enum PAGE_ORIENTATION {
+  NORTH = 0,
+  WEST = 1,
+  SOUTH = 2,
+  EAST = 3,
 }

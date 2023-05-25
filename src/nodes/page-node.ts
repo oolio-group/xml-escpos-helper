@@ -1,5 +1,5 @@
 import { XMLNode } from '../xml-node';
-import { BufferBuilder } from '../buffer-builder';
+import { BufferBuilder, PAGE_ORIENTATION } from '../buffer-builder';
 
 export default class PageNode extends XMLNode {
 
@@ -9,6 +9,23 @@ export default class PageNode extends XMLNode {
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
     bufferBuilder.beginPage();
+    var orientation = PAGE_ORIENTATION.NORTH;
+    switch (this.attributes.orientation) {
+      case 'north':
+        orientation = PAGE_ORIENTATION.NORTH;
+        break;
+      case 'west':
+        orientation = PAGE_ORIENTATION.WEST;
+        break;
+      case 'south':
+        orientation = PAGE_ORIENTATION.SOUTH;
+        break;
+      case 'east':
+        orientation = PAGE_ORIENTATION.EAST;
+        break;
+    }
+    bufferBuilder.rotatePage(orientation);
+
     return bufferBuilder;
   }
 
