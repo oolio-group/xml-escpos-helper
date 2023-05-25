@@ -27,7 +27,7 @@ export class BufferBuilder {
     return this;
   }
 
-  public rotatePage(o: PAGE_ORIENTATION) {
+  public orientPage(o: PAGE_ORIENTATION) {
     this.buffer.write(Command.ESC_T(o));
   }
 

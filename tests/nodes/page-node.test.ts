@@ -24,7 +24,7 @@ describe('PageNode', () => {
     {o:'west', n:1},
     {o:'south', n:2},
     {o:'east', n:3}
-  ].forEach(({o: orientation, n}) => test(`${orientation} page rotation`, () => {
+  ].forEach(({o: orientation, n}) => test(`${orientation} page orientation`, () => {
     const input = parser(`<page orientation="${orientation}"></page>`).root;
 
     const page = new PageNode(input);
@@ -32,6 +32,15 @@ describe('PageNode', () => {
     const output = page.draw(new BufferBuilder()).build();
     expect(output).toStrictEqual(Buffer.concat([START_PAGE, ROTATE, Buffer.from([n]), FORM_FEED, END]));
   }));
+
+  test('invalid orientation', () => {
+    const input = parser(`<page orientation="foo"></page>`).root;
+
+    const page = new PageNode(input);
+
+    const output = page.draw(new BufferBuilder()).build();
+    expect(output).toStrictEqual(Buffer.concat([START_PAGE, ROTATE_N, FORM_FEED, END]));
+  })
 
   test('page size', () => {
     const input = parser('<page size="500:501"></page>').root;
