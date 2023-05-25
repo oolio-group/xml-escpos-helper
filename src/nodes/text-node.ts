@@ -9,8 +9,8 @@ export default class TextNode extends XMLNode {
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
 
-    if (/\d+:\d+/.test(this.attributes.size)) {
-      let size: number[] = new String(this.attributes.size).split(':').map(entry => parseInt(entry));
+    const size = this.getNumberPairAttribute('size');
+    if (size) {
       bufferBuilder.setCharacterSize(size[0], size[1]);
     }
 

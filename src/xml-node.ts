@@ -21,6 +21,14 @@ export abstract class XMLNode {
     return this.content;
   }
 
+  protected getNumberPairAttribute(attr: string): [number, number] {
+    const matches = /(\d+):(\d+)/.exec(this.attributes[attr]);
+    if (matches) {
+      return [parseInt(matches[1]), parseInt(matches[2])];
+    }
+    return undefined;
+  }
+
   public abstract open(bufferBuilder: BufferBuilder): BufferBuilder | Promise<BufferBuilder>;
 
   public abstract close(bufferBuilder: BufferBuilder): BufferBuilder;
