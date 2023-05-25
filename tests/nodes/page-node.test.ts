@@ -20,17 +20,17 @@ describe('PageNode', () => {
   });
 
   [
-    ['north', 0],
-    ['west', 1],
-    ['south', 2],
-    ['east', 3]
-  ].forEach(([orientation, v]: [string, number]) => test(`${orientation} page rotation`, () => {
+    {o:'north', n: 0},
+    {o:'west', n:1},
+    {o:'south', n:2},
+    {o:'east', n:3}
+  ].forEach(({o: orientation, n}) => test(`${orientation} page rotation`, () => {
     const input = parser(`<page orientation="${orientation}"></page>`).root;
 
     const page = new PageNode(input);
 
     const output = page.draw(new BufferBuilder()).build();
-    expect(output).toStrictEqual(Buffer.concat([START_PAGE, ROTATE, Buffer.from([v]), FORM_FEED, END]));
+    expect(output).toStrictEqual(Buffer.concat([START_PAGE, ROTATE, Buffer.from([n]), FORM_FEED, END]));
   }));
 
   test('page size', () => {
