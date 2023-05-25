@@ -3,6 +3,7 @@ import TextLineNode from '../../src/nodes/text-line-node';
 import { BufferBuilder } from '../../src/buffer-builder';
 import parser from 'xml-parser';
 
+const SIZE = Buffer.from([29, 33]);
 const RESET = Buffer.from([29, 33, 0]);
 const FEED = Buffer.from([27, 100, 0]);
 const END = Buffer.from([10, 27, 64]);
@@ -29,6 +30,15 @@ describe('TextNode', () => {
     const output = text.draw(new BufferBuilder()).build();
     expect(output).toStrictEqual(Buffer.concat([Buffer.from(expected), RESET, END]));
   }));
+
+  test('size', () => {
+    const input = parser(`<text size="1:2"></text>`).root;
+
+    const text = new TextNode(input);
+
+    const output = text.draw(new BufferBuilder()).build();
+    expect(output).toStrictEqual(Buffer.concat([SIZE, Buffer.from([0x12]), RESET, END]));
+  });
 });
 
 describe('TextLineNode', () => {
