@@ -17,6 +17,32 @@ export class BufferBuilder {
     return this;
   }
 
+  public beginPage(): BufferBuilder {
+    this.buffer.write(Command.ESC_L);
+    return this;
+  }
+
+  public endPage(): BufferBuilder {
+    this.buffer.write([Command.FF]);
+    return this;
+  }
+
+  public orientPage(o: PAGE_ORIENTATION) {
+    this.buffer.write(Command.ESC_T(o));
+  }
+
+  public setPageSize(
+    size: [number, number],
+    origin: [number, number] = [0, 0]
+  ): BufferBuilder {
+    this.buffer.write(Command.ESC_W);
+    this.buffer.writeUInt16LE(origin[0]);
+    this.buffer.writeUInt16LE(origin[1]);
+    this.buffer.writeUInt16LE(size[0]);
+    this.buffer.writeUInt16LE(size[1]);
+    return this;
+  }
+
   public resetCharacterCodeTable(): BufferBuilder {
     this.buffer.write(Command.ESC_t(0));
     return this;
@@ -304,4 +330,11 @@ export enum RASTER_MODE {
   DOUBLE_WIDTH = 1,
   DOUBLE_HEIGHT = 2,
   DOUBLE_WIDTH_HEIGHT = 3,
+}
+
+export enum PAGE_ORIENTATION {
+  NORTH = 0,
+  WEST = 1,
+  SOUTH = 2,
+  EAST = 3,
 }

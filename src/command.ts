@@ -14,6 +14,8 @@ export class Command {
   public static DLE_EOT            = (n: number): number[] => [Command.DLE, 0x04, n]; // DLEEOTn
 
   public static ESC_init: number[] = [Command.ESC, 0x40]; //ESC@
+  public static ESC_L              = [Command.ESC, 0x4C]; //ESCL
+  public static ESC_W              = [Command.ESC, 0x57]; //ESCW
   public static ESC_exclamation    = (n: number): number[] => [Command.ESC, 0x21, n]; // ESC!n
   public static ESC_minus          = (n: number): number[] => [Command.ESC, 0x2D, n]; // ESC-n
   public static ESC_rev            = (n: number): number[] => [Command.ESC, 0x7B, n]; // ESC{n
@@ -23,6 +25,7 @@ export class Command {
   public static ESC_G              = (n: number): number[] => [Command.ESC, 0x47, n]; // ESCGn
   public static ESC_J              = (n: number): number[] => [Command.ESC, 0x4A, n]; // ESCJn
   public static ESC_M              = (n: number): number[] => [Command.ESC, 0x4D, n]; // ESCMn
+  public static ESC_T              = (n: number): number[] => [Command.ESC, 0x54, n]; // ESCTn
   public static ESC_t              = (n: number): number[] => [Command.ESC, 0x07, n]; // ESCtn
   public static ESC_Z              = (m: number, n: number, k: number): number[] => [Command.ESC, 0x5A, m, n, k]; // ESCZmnk
 
