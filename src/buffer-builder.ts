@@ -17,6 +17,16 @@ export class BufferBuilder {
     return this;
   }
 
+  public beginPage(): BufferBuilder {
+    this.buffer.write(Command.ESC_L);
+    return this;
+  }
+
+  public endPage(): BufferBuilder {
+    this.buffer.write([Command.FF]);
+    return this;
+  }
+
   public resetCharacterCodeTable(): BufferBuilder {
     this.buffer.write(Command.ESC_t(0));
     return this;

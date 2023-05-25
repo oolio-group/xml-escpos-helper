@@ -8,10 +8,11 @@ export default class PageNode extends XMLNode {
   }
 
   public open(bufferBuilder: BufferBuilder): BufferBuilder {
+    bufferBuilder.beginPage();
     return bufferBuilder;
   }
 
   public close(bufferBuilder: BufferBuilder): BufferBuilder {
-    return bufferBuilder;
+    return bufferBuilder.endPage();
   }
 }
