@@ -15,6 +15,7 @@ export class Command {
 
   public static ESC_init: number[] = [Command.ESC, 0x40]; //ESC@
   public static ESC_L              = [Command.ESC, 0x4C]; //ESCL
+  public static ESC_W              = [Command.ESC, 0x57]; //ESCW
   public static ESC_exclamation    = (n: number): number[] => [Command.ESC, 0x21, n]; // ESC!n
   public static ESC_minus          = (n: number): number[] => [Command.ESC, 0x2D, n]; // ESC-n
   public static ESC_rev            = (n: number): number[] => [Command.ESC, 0x7B, n]; // ESC{n

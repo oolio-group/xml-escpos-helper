@@ -26,6 +26,12 @@ export default class PageNode extends XMLNode {
     }
     bufferBuilder.rotatePage(orientation);
 
+    const size = this.getNumberPairAttribute('size');
+    if (size) {
+      const origin = this.getNumberPairAttribute('origin');
+      bufferBuilder.setPageSize(size, origin);
+    }
+
     return bufferBuilder;
   }
 

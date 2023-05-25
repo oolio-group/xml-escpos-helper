@@ -31,6 +31,18 @@ export class BufferBuilder {
     this.buffer.write(Command.ESC_T(o));
   }
 
+  public setPageSize(
+    size: [number, number],
+    origin: [number, number] = [0, 0]
+  ): BufferBuilder {
+    this.buffer.write(Command.ESC_W);
+    this.buffer.writeUInt16LE(origin[0]);
+    this.buffer.writeUInt16LE(origin[1]);
+    this.buffer.writeUInt16LE(size[0]);
+    this.buffer.writeUInt16LE(size[1]);
+    return this;
+  }
+
   public resetCharacterCodeTable(): BufferBuilder {
     this.buffer.write(Command.ESC_t(0));
     return this;
