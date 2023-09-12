@@ -28,13 +28,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/hitz-group/xml-escpos-helper.git"
+    "url": "http://github.com/oolio-group/xml-escpos-helper.git"
   },
   "contributors": [
     "Snehit Velma <snehithvelma@gmail.com>"
   ],
   "bugs": {
-    "url": "https://github.com/hitz-group/xml-escpos-helper/issues"
+    "url": "https://github.com/oolio-group/xml-escpos-helper/issues"
   },
   "dependencies": {
     "buffer": "^6.0.3",
