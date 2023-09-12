@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Using in Nodejs env",
   "main": "index.js",
-  "repository": "http://github.com/hitz-group/xml-escpos-helper.git",
+  "repository": "http://github.com/oolio-group/xml-escpos-helper.git",
   "license": "MIT",
   "private": false,
   "scripts": {
