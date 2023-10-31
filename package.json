@@ -8,7 +8,7 @@
     "xml",
     "printer"
   ],
-  "version": "0.2.7",
+  "version": "0.2.8",
   "files": [
     "lib",
     "LICENSE",
@@ -41,7 +41,7 @@
     "mustache": "^4.1.0",
     "mutable-buffer": "2.0.3",
     "ndarray": "^1.0.19",
-    "pngjs": "^6.0.0",
+    "upng-js": "2.1.0",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
