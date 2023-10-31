@@ -41,8 +41,7 @@
     "mustache": "^4.1.0",
     "mutable-buffer": "2.0.3",
     "ndarray": "^1.0.19",
-    "pngjs": "^6.0.0",
-    "upng-js": "^2.1.0",
+    "upng-js": "2.1.0",
     "xml-parser": "^1.2.1"
   },
   "devDependencies": {
