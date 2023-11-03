@@ -30,13 +30,13 @@ export const TEMPLATES = {
   <document>
     <align mode="center">
       <bold>
-        <text-line size="1:0">{{title}}</text-line>
+        <text-line size="0:0">{{title}}</text-line>
       </bold>
-
-      <image density="d24">
+      <image>
         {{logo}}
       </image>
     </align>
+    <paper-cut/>
   </document>`,
   [Templates.QR_CODE]: `
   <?xml version="1.0" encoding="UTF-8"?>
@@ -64,4 +64,4 @@ export const TEMPLATES = {
     <text-line>{{tableData}}</text-line>
     <paper-cut/>
   </document>`,
-}
+};

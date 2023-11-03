@@ -1,6 +1,6 @@
 import net from 'net';
 import { EscPos } from '@tillpos/xml-escpos-helper';
-const PRINTERS = [{ device_name: 'Epson', host: '192.168.0.8', port: 9100 }];
+const PRINTERS = [{ device_name: 'Epson', host: '10.15.0.173', port: 9100 }];
 
 const connectToPrinter = (
   host: string,

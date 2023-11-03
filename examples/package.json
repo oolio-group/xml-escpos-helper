@@ -15,10 +15,12 @@
     "print:barcode": "yarn compile && yarn node ./dist/printBarcode.js"
   },
   "dependencies": {
-    "@tillpos/xml-escpos-helper": "^0.1.8",
-    "table": "^6.6.0"
+    "@tillpos/xml-escpos-helper": "0.2.8",
+    "table": "^6.6.0",
+    "upng-js": "^2.1.0"
   },
   "devDependencies": {
+    "@types/upng-js": "^2.1.4",
     "typescript": "^4.2.4"
   }
 }
