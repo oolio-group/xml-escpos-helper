@@ -22,6 +22,11 @@ export class BufferBuilder {
     return this;
   }
 
+  public setPrintColor(color: 'black' | 'red' = 'black'): BufferBuilder {
+    this.buffer.write(Command.ESC_r(color === 'red' ? 1 : 0));
+    return this;
+  }
+
   public setCharacterSize(
     width: number = 0,
     height: number = 0
