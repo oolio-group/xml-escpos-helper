@@ -1,5 +1,5 @@
 {
-  "name": "@tillpos/xml-escpos-helper",
+  "name": "@oolio-group/xml-escpos-helper",
   "description": "ESC/POS with XML interface",
   "keywords": [
     "escpos",

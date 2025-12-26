@@ -5,7 +5,6 @@
   "main": "index.js",
   "repository": "http://github.com/oolio-group/xml-escpos-helper.git",
   "license": "MIT",
-  "private": false,
   "scripts": {
     "clean": "rm -rf ./dist && rm -rf ./tsconfig.build.tsbuildinfo",
     "compile": "yarn clean && tsc  -p ./tsconfig.json",
@@ -15,7 +14,7 @@
     "print:barcode": "yarn compile && yarn node ./dist/printBarcode.js"
   },
   "dependencies": {
-    "@tillpos/xml-escpos-helper": "^0.1.8",
+    "@oolio-group/xml-escpos-helper": "^0.1.8",
     "table": "^6.6.0"
   },
   "devDependencies": {

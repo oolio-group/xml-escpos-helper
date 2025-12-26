@@ -1,13 +1,14 @@
-name: npm-publish
+name: github-publish
+
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
 
 jobs:
-  npm-publish:
-    name: npm-publish
+  github-publish:
+    name: github-publish
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -15,13 +16,15 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 18
-        registry-url: https://registry.npmjs.org/
+        registry-url: "https://npm.pkg.github.com"
+        scope: "@oolio-group"
     - name: Install Node Dependencies
       run: yarn install; cd examples; yarn install; cd ..
     - name: Build packages
       run: yarn build
       env:
         CI: "TRUE"
-    - run: npm publish --access public
+    - name: Publish package
+      run: npm publish
       env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        NODE_AUTH_TOKEN: ${{ secrets.GITOPS_TOKEN }}
