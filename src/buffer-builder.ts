@@ -6,7 +6,7 @@ export class BufferBuilder {
   private hasGSCommand: boolean;
   private doEmphasise: boolean;
 
-  constructor(private defaultSettings: boolean = true) {
+  constructor(private shouldReset: boolean = true) {
     this.buffer = new MutableBuffer();
     this.hasGSCommand = true;
     this.doEmphasise = false;
@@ -198,8 +198,8 @@ export class BufferBuilder {
   }
 
   public build(): number[] {
-    if (this.defaultSettings) {
-      this.lineFeed();
+    this.lineFeed();
+    if (this.shouldReset) {
       this.buffer.write(Command.ESC_init);
     }
 
