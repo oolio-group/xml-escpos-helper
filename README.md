@@ -35,7 +35,7 @@ Cross platform JavaScript library that implements the thermal printer ESC / POS 
 ## Installation
 
 ```bash
-  yarn add @tillpos/xml-escpos-helper
+  yarn add @oolio-group/xml-escpos-helper
 ```
 
 ## Examples
@@ -44,7 +44,7 @@ Cross platform JavaScript library that implements the thermal printer ESC / POS 
 
 ```ts
 
-import { EscPos } from '@tillpos/xml-escpos-helper';
+import { EscPos } from '@oolio-group/xml-escpos-helper';
 
 // store this template somewhere `s3` or as `static asset` based on your preference 
 const template = `
