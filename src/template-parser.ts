@@ -9,7 +9,7 @@ export class TemplateParser {
     this.mustache = Mustache;
   }
 
-  public parser(template, scope, shouldReset: boolean = true): BufferBuilder {
+  public parser(template, scope, shouldReset: boolean = false): BufferBuilder {
     const xml = this.mustache.render(template, scope);
     return new XMLParser().parser(xml, shouldReset);
   }

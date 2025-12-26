@@ -6,7 +6,7 @@ export class BufferBuilder {
   private hasGSCommand: boolean;
   private doEmphasise: boolean;
 
-  constructor(private shouldReset: boolean = true) {
+  constructor(private shouldReset: boolean = false) {
     this.buffer = new MutableBuffer();
     this.hasGSCommand = true;
     this.doEmphasise = false;
