@@ -11,6 +11,9 @@ export class BufferBuilder {
     this.hasGSCommand = true;
     this.doEmphasise = false;
 
+    if (this.shouldReset) {
+      this.buffer.write(Command.ESC_init);
+    }
   }
 
   public end(): BufferBuilder {
@@ -199,10 +202,6 @@ export class BufferBuilder {
 
   public build(): number[] {
     this.lineFeed();
-    if (this.shouldReset) {
-      this.buffer.write(Command.ESC_init);
-    }
-
     return this.buffer.flush();
   }
 
